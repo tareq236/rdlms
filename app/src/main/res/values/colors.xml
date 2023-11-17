@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="edit_text_color">#303030</color>
+    <color name="button_bg">#27517C</color>
+    <color name="bg">#E2E4ED</color>
+    <color name="tool_bg">#073579</color>
+    <color name="menu_bd">#30557C</color>
+    <color name="text_color">#575757</color>
+    <color name="blue_text_color">#051B3C</color>
+</resources>
