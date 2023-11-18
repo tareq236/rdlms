@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".delivery.DeliveryRemainingDetailsActivity">
+    android:background="@color/bg"
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -18,5 +19,169 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Delivery Details "
         app:titleTextColor="@color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            >
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                app:strokeColor="@color/white"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:paddingBottom="15dp"
+                    android:layout_marginHorizontal="16dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Billing Date:"
+                            />
+                        <TextView
+                            android:id="@+id/dateId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2023-10-11"
+                            android:layout_marginHorizontal="10dp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Route Name:"
+                            />
+                        <TextView
+                            android:id="@+id/routeNameId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CTG road ,Narayangonj"
+                            android:layout_marginHorizontal="10dp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Da Name:"
+                            />
+                        <TextView
+                            android:id="@+id/daNameId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Md.Uzzal Hossain"
+                            android:layout_marginHorizontal="10dp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Customer Name:"
+                            />
+                        <TextView
+                            android:id="@+id/customerNameId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Md.Uzzal Hossain"
+                            android:layout_marginHorizontal="10dp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Customer Address:"
+                            />
+                        <TextView
+                            android:id="@+id/customerAddressId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Md.Uzzal Hossain"
+                            android:layout_marginHorizontal="10dp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Customer Mobile:"
+                            />
+                        <TextView
+                            android:id="@+id/customerMobileId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Md.Uzzal Hossain"
+                            android:layout_marginHorizontal="10dp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <ImageView
+                            android:id="@+id/imageMap"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/map_pin_solid"
+                            android:layout_marginTop="05dp"
+                            />
+
+                    </LinearLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="0dp"
+                        />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

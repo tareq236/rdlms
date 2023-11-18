@@ -1,0 +1,121 @@
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/white"
+    app:strokeColor="#E3E3E3"
+    android:id="@+id/mcv_item">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingBottom="10dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Billing Doc No:"
+                />
+            <TextView
+                android:id="@+id/billDocNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2023-10-11"
+                android:layout_marginHorizontal="10dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Billing Date:"
+                />
+            <TextView
+                android:id="@+id/billingDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CTG road ,Narayangonj"
+                android:layout_marginHorizontal="10dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delivery Status:"
+                />
+            <TextView
+                android:id="@+id/deliveryStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="pending"
+                android:layout_marginHorizontal="10dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Pass No:"
+                />
+            <TextView
+                android:id="@+id/getPassNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2123"
+                android:layout_marginHorizontal="10dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vehicle No:"
+                />
+            <TextView
+                android:id="@+id/vehicleNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3212"
+                android:layout_marginHorizontal="10dp"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

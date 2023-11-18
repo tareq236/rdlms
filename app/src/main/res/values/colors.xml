@@ -9,4 +9,5 @@
     <color name="menu_bd">#30557C</color>
     <color name="text_color">#575757</color>
     <color name="blue_text_color">#051B3C</color>
+    <color name="bgColor">#F4F8FB</color>
 </resources>
