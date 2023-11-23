@@ -40,12 +40,17 @@ class InvoiceListAdapter(val context: Context) : RecyclerView.Adapter<InvoiceLis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
         with(holder) {
+            var totalNetVal = 0.0
+            var totalQty = 0.0
+            for (product in item.product_list) {
+                totalNetVal += product.net_val
+                totalQty += product.quantity
+            }
 
-            binding.billDocNo.text = item.billing_doc_no
-            binding.billingDate.text = item.billing_date
-            binding.deliveryStatus.text = item.delivery_status
-            binding.getPassNo.text = item.gate_pass_no
-            binding.vehicleNo.text = item.vehicle_no
+            binding.txvBillDocNo.text = item.billing_doc_no
+            binding.txvDeliveryStatus.text = item.delivery_status
+            binding.txvInvoiceQty.text = totalQty.toString()
+            binding.txvInvoiceAmount.text = totalNetVal.toString()
 
             binding.mcvItem.setOnClickListener {
                 val gson = Gson()

@@ -32,7 +32,6 @@ class ProductListActivity : AppCompatActivity() {
 
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
-        Log.d("product_list", deliveryDetailsString!!)
         val productList = deliveryDetailsM.product_list
 
         adapter = ProductListAdapter(this)
@@ -41,6 +40,12 @@ class ProductListActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
+
+        binding.txvBillDocNo.text = deliveryDetailsM.billing_doc_no
+        binding.customerNameId.text = deliveryDetailsM.customer_name
+        binding.customerAddressId.text = deliveryDetailsM.customer_address
+        binding.txvGatePassNo.text = deliveryDetailsM.gate_pass_no
+        binding.txvVehicleNo.text = deliveryDetailsM.vehicle_no
 
         adapter.addData(productList as MutableList<Product>)
 
@@ -54,31 +59,13 @@ class ProductListActivity : AppCompatActivity() {
                 qty+= qty
                 sumTotalA+=qty*tp
             }
-            binding.totalQtyId.text = qty.toString()
-            binding.totalAmountId.text = sumTotalA.toString()
+
 
         }catch (e:Exception){
             e.printStackTrace()
         }
 
 
-        binding.allDelivered.setOnClickListener {
-            try {
-                var sumQty = 0
-                var sumTotalA = 0.0
 
-                for (i in productList.indices) {
-                    qty = productList[i].quantity
-                    val tp = productList[i].tp
-                    qty+= qty
-                    sumTotalA+=qty*tp
-                }
-                binding.totalQtyId.text = qty.toString()
-                binding.totalAmountId.text = sumTotalA.toString()
-
-            }catch (e:Exception){
-                e.printStackTrace()
-            }
-        }
     }
 }

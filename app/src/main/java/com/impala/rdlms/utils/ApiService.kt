@@ -67,6 +67,7 @@ interface ApiService {
             // Set up Retrofit and return an instance of ApiService
             val retrofit = Retrofit.Builder()
                 .baseUrl("http://116.68.200.97:6042")
+//                .baseUrl("http://172.16.16.88:6042")
 //                .baseUrl("http://192.168.0.112:6042")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

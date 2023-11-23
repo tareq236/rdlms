@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/bg"
     tools:context=".delivery.ProductListActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -20,72 +20,186 @@
         app:title="Product List "
         app:titleTextColor="@color/white" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp" />
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-
-    <RelativeLayout
-        android:id="@+id/rlInvoice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="10dp"
-        >
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/allDelivered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="All Delivered"
-            app:cornerRadius="6dp" />
         <LinearLayout
-            android:id="@+id/linQty"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical">
 
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="T Qty:" />
-
-            <TextView
-                android:id="@+id/totalQtyId"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="0" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linTotalAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/linQty"
-            >
+                android:layout_marginTop="10dp"
+                app:strokeColor="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:paddingBottom="15dp"
+                    android:layout_marginHorizontal="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/txvBillDocNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="907656765"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_color"
+                            android:textSize="15dp"
+                            android:layout_marginHorizontal="10dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="3dp">
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:text="Customer Name"
+                            android:textColor="@color/white"
+                            android:background="@color/txv_bg"
+                            android:textSize="13sp"/>
+                        <TextView
+                            android:id="@+id/customerNameId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:background="@color/txv_val_bg"
+                            android:textSize="13sp"
+                            android:text="Md.Uzzal Hossain" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="3dp">
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:text="Customer Address"
+                            android:textColor="@color/white"
+                            android:background="@color/txv_bg"
+                            android:textSize="13sp"/>
+                        <TextView
+                            android:id="@+id/customerAddressId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:gravity="center_vertical"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingLeft="5dp"
+                            android:background="@color/txv_val_bg"
+                            android:textSize="13sp"
+                            android:text="Md.Uzzal Hossain" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="3dp">
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:text="Gate Pass No"
+                            android:textColor="@color/white"
+                            android:background="@color/txv_bg"
+                            android:textSize="13sp"/>
+                        <TextView
+                            android:id="@+id/txvGatePassNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:background="@color/txv_val_bg"
+                            android:textSize="13sp"
+                            android:text="Md.Uzzal Hossain" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="3dp">
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:text="Vehicle No"
+                            android:textColor="@color/white"
+                            android:background="@color/txv_bg"
+                            android:textSize="13sp"/>
+                        <TextView
+                            android:id="@+id/txvVehicleNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:background="@color/txv_val_bg"
+                            android:textSize="13sp"
+                            android:text="Md.Uzzal Hossain" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="T Amount:" />
-
-            <TextView
-                android:id="@+id/totalAmountId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:text="0" />
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="0dp"
+                />
         </LinearLayout>
 
-    </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
