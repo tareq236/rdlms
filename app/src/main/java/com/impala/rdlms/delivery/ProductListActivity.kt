@@ -8,14 +8,18 @@ import com.google.gson.Gson
 import com.impala.rdlms.R
 import com.impala.rdlms.databinding.ActivityDeliveryRemainingDetailsBinding
 import com.impala.rdlms.databinding.ActivityProductListBinding
+import com.impala.rdlms.db.DatabaseHelper
+import com.impala.rdlms.db.ProductModel
 import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.delivery.model.Invoice
 import com.impala.rdlms.delivery.model.Product
 
-class ProductListActivity : AppCompatActivity() {
+class ProductListActivity : AppCompatActivity(),ProductListAdapter.MainClickManage {
     private lateinit var binding: ActivityProductListBinding
     lateinit var adapter: ProductListAdapter
     var qty =0
+    var invoiceId =""
+    lateinit var db:DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +33,14 @@ class ProductListActivity : AppCompatActivity() {
     }
 
     private fun initView(){
-
+        invoiceId = this.intent.getStringExtra("invoice_id")!!
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
-        val productList = deliveryDetailsM.product_list
+        //val productList = deliveryDetailsM.product_list
+        db = DatabaseHelper(this)
+        val productList =db.getAllProductData(invoiceId)
 
-        adapter = ProductListAdapter(this)
+        adapter = ProductListAdapter(this,this)
         val linearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
@@ -47,25 +53,37 @@ class ProductListActivity : AppCompatActivity() {
         binding.txvGatePassNo.text = deliveryDetailsM.gate_pass_no
         binding.txvVehicleNo.text = deliveryDetailsM.vehicle_no
 
-        adapter.addData(productList as MutableList<Product>)
+        adapter.addData(productList as MutableList<ProductModel>)
 
-        try {
-            var sumQty = 0
-            var sumTotalA = 0.0
+//        try {
+//            var sumQty = 0
+//            var sumTotalA = 0.0
+//
+//            for (i in productList.indices) {
+//                qty = productList[i].quantity
+//                val tp = productList[i].tp
+//                qty+= qty
+//                sumTotalA+=qty*tp
+//            }
+//
+//
+//        }catch (e:Exception){
+//            e.printStackTrace()
+//        }
 
-            for (i in productList.indices) {
-                qty = productList[i].quantity
-                val tp = productList[i].tp
-                qty+= qty
-                sumTotalA+=qty*tp
-            }
+        binding.allReceivedId.setOnClickListener {
 
-
-        }catch (e:Exception){
-            e.printStackTrace()
         }
 
+    }
 
+    override fun doClick() {
+        if (!binding.recyclerView.isComputingLayout)
+        {
+            val productList =db.getAllProductData(invoiceId)
+            adapter.clearData()
+            adapter.addData(productList as MutableList<ProductModel>)
+        }
 
     }
 }

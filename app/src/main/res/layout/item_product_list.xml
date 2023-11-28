@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+
     android:layout_marginTop="5dp"
     android:orientation="vertical"
     app:cardBackgroundColor="@color/white"
@@ -16,26 +15,39 @@
         android:layout_height="match_parent"
         android:padding="15dp"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/productName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="hadsh"
-            />
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product Name:"
+                />
+            <TextView
+                android:id="@+id/productName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="hadsh"
+                android:layout_marginHorizontal="05dp"
+                />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/lin1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-             android:layout_marginTop="05dp"
+             android:layout_marginTop="08dp"
             >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Qty:"
+                android:text="Received Qty:"
                 />
             <EditText
-                android:id="@+id/totalQtyId"
+                android:id="@+id/receivedQty"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -43,11 +55,52 @@
                 android:layout_marginHorizontal="10dp"
                 />
         </LinearLayout>
-
+        <LinearLayout
+            android:id="@+id/lin2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="05dp"
+            android:layout_below="@+id/lin1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Received Amount:"
+                />
+            <TextView
+                android:id="@+id/receivedAmountId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:layout_marginHorizontal="10dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lin3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="05dp"
+            android:layout_below="@+id/lin2"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Qty:"
+                />
+            <TextView
+                android:id="@+id/totalQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:layout_marginHorizontal="10dp"
+                />
+        </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lin1"
+            android:layout_below="@+id/lin3"
             android:layout_marginTop="05dp"
             >
             <LinearLayout
@@ -58,7 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="T Amount:"
+                    android:text="Total Amount:"
                     />
                 <TextView
                     android:id="@+id/totalAmountId"
