@@ -43,7 +43,9 @@ class ProductListAdapter(private val list: List<Product>) : RecyclerView.Adapter
             receivedQty.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     if(s.toString().isNotEmpty()){
-                        if(item.tp > receivedQty.text.toString().toDouble()){
+                        val totalQty = item.quantity
+
+                        if(s.toString().toInt()<=totalQty){
                             receivedAmount.text = (receivedQty.text.toString().toDouble() * item.tp).toString()
                         }else{
                             receivedQty.setText("")
