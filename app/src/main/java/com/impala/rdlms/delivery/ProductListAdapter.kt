@@ -35,6 +35,7 @@ class ProductListAdapter(private val list: List<Product>) : RecyclerView.Adapter
             val totalQty = itemView.findViewById<TextView>(R.id.totalQty)
             val totalAmount = itemView.findViewById<TextView>(R.id.totalAmountId)
             val receivedQty = itemView.findViewById<EditText>(R.id.receivedQty)
+            val returnQty = itemView.findViewById<EditText>(R.id.returnQty)
             val receivedAmount = itemView.findViewById<TextView>(R.id.receivedAmountId)
             productName.text = item.material_name
             totalQty.text = item.quantity.toString()
@@ -47,15 +48,28 @@ class ProductListAdapter(private val list: List<Product>) : RecyclerView.Adapter
 
                         if(s.toString().toInt()<=totalQty){
                             receivedAmount.text = (receivedQty.text.toString().toDouble() * item.tp).toString()
+
+                            val receivedQty = s.toString().toInt()
+                            val result = totalQty - receivedQty
+                            returnQty.setText(result.toString())
                         }else{
                             receivedQty.setText("")
+                            receivedAmount.text = "0"
                             Toast.makeText(itemView.context,"Please input receive quantity under or qual of order quantity",Toast.LENGTH_SHORT).show();
                         }
+
+
+                    }else{
+                        returnQty.setText("")
+                        receivedAmount.text = "0"
                     }
                 }
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
+
+
+
         }
     }
 
