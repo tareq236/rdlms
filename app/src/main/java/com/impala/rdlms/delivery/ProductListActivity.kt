@@ -2,24 +2,17 @@ package com.impala.rdlms.delivery
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.impala.rdlms.R
-import com.impala.rdlms.databinding.ActivityDeliveryRemainingDetailsBinding
 import com.impala.rdlms.databinding.ActivityProductListBinding
-import com.impala.rdlms.db.DatabaseHelper
-import com.impala.rdlms.db.ProductModel
-import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.delivery.model.Invoice
-import com.impala.rdlms.delivery.model.Product
 
-class ProductListActivity : AppCompatActivity(),ProductListAdapter.MainClickManage {
+class ProductListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductListBinding
     lateinit var adapter: ProductListAdapter
     var qty =0
     var invoiceId =""
-    lateinit var db:DatabaseHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +29,9 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.MainClickMana
         invoiceId = this.intent.getStringExtra("invoice_id")!!
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
-        //val productList = deliveryDetailsM.product_list
-        db = DatabaseHelper(this)
-        val productList =db.getAllProductData(invoiceId)
+        val productList = deliveryDetailsM.product_list
 
-        adapter = ProductListAdapter(this,this)
+        adapter = ProductListAdapter(productList)
         val linearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
@@ -53,7 +44,7 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.MainClickMana
         binding.txvGatePassNo.text = deliveryDetailsM.gate_pass_no
         binding.txvVehicleNo.text = deliveryDetailsM.vehicle_no
 
-        adapter.addData(productList as MutableList<ProductModel>)
+
 
 //        try {
 //            var sumQty = 0
@@ -73,16 +64,6 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.MainClickMana
 
         binding.allReceivedId.setOnClickListener {
 
-        }
-
-    }
-
-    override fun doClick() {
-        if (!binding.recyclerView.isComputingLayout)
-        {
-            val productList =db.getAllProductData(invoiceId)
-            adapter.clearData()
-            adapter.addData(productList as MutableList<ProductModel>)
         }
 
     }

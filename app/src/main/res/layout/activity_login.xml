@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/imgLogo"
             android:hint="SAP ID"
-            android:text="50215"
+            android:text="52150"
             android:background="@drawable/edittext_background"
             android:padding="15dp"
             android:textSize="14sp"

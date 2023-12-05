@@ -10,119 +10,167 @@
     app:strokeColor="#E3E3E3"
     android:id="@+id/mcv_item">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="15dp"
-        android:orientation="vertical">
-        <LinearLayout
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:padding="15dp"
+       android:orientation="vertical">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Product Name:"
+               android:textStyle="bold" />
+           <TextView
+               android:id="@+id/productName"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="N/A"
+               android:layout_marginHorizontal="05dp"
+               />
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_marginTop="04dp">
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_weight="2">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Invoice Qty:"
+                   android:textStyle="bold"/>
+               <TextView
+                   android:id="@+id/totalQty"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="0"
+                   android:layout_marginHorizontal="10dp"
+                   />
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:orientation="horizontal">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Invoice Amount:"
+                   android:textStyle="bold"/>
+               <TextView
+                   android:id="@+id/totalAmountId"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="0"
+                   android:layout_marginHorizontal="10dp"
+                   />
+           </LinearLayout>
+       </LinearLayout>
+
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="1dp"
+           android:background="@android:color/darker_gray"/>
+
+       <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Product Name:"
-                />
-            <TextView
-                android:id="@+id/productName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="hadsh"
-                android:layout_marginHorizontal="05dp"
-                />
+            android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Received Qty:"
+                        android:textStyle="bold"
+                        android:textColor="@color/green_text_color"/>
+                    <EditText
+                        android:id="@+id/receivedQty"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:inputType="number"
+                        android:layout_marginHorizontal="10dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Return Qty:"
+                            android:textColor="@color/red_text_color"
+                            android:textStyle="bold"/>
+                        <EditText
+                            android:id="@+id/returnQty"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:inputType="number"
+                            android:layout_marginHorizontal="10dp"
+                            />
+                </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/lin1"
+       <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-             android:layout_marginTop="08dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Received Qty:"
-                />
-            <EditText
-                android:id="@+id/receivedQty"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:inputType="number"
-                android:layout_marginHorizontal="10dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/lin2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="05dp"
-            android:layout_below="@+id/lin1"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Received Amount:"
-                />
-            <TextView
-                android:id="@+id/receivedAmountId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_marginHorizontal="10dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/lin3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="05dp"
-            android:layout_below="@+id/lin2"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total Qty:"
-                />
-            <TextView
-                android:id="@+id/totalQty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_marginHorizontal="10dp"
-                />
-        </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lin3"
-            android:layout_marginTop="05dp"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
+            android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total Amount:"
-                    />
-                <TextView
-                    android:id="@+id/totalAmountId"
-                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rec. Amount:"
+                            />
+                        <TextView
+                            android:id="@+id/receivedAmountId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:layout_marginHorizontal="10dp"
+                            />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:layout_marginHorizontal="10dp"
-                    />
-            </LinearLayout>
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ret. Amount:"
+                            />
+                        <TextView
+                            android:id="@+id/returnAmountId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:layout_marginHorizontal="10dp"
+                            />
+                </LinearLayout>
+    </LinearLayout>
 
-        </RelativeLayout>
-    </RelativeLayout>
+   </LinearLayout>
+
 
 </com.google.android.material.card.MaterialCardView>

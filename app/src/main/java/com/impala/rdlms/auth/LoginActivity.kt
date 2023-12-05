@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
         // Make the API call
         apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful){
                     // Handle successful login response
                     val loginResponse = response.body()
                     if (loginResponse != null) {

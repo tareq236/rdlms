@@ -17,7 +17,6 @@ class InvoiceListAdapter(val context: Context) :
     RecyclerView.Adapter<InvoiceListAdapter.ViewHolder>() {
 
     var list: MutableList<Invoice> = mutableListOf()
-    var db: DatabaseHelper = DatabaseHelper(context)
 
     fun addData(allCus: MutableList<Invoice>) {
         list.addAll(allCus)
@@ -58,40 +57,6 @@ class InvoiceListAdapter(val context: Context) :
             binding.mcvItem.setOnClickListener {
                 val gson = Gson()
                 val jsonStringItem = gson.toJson(item)
-                val isExist = db.isExistData(item.billing_doc_no)
-                if(isExist){
-
-                }else {
-                    val prodList = item.product_list
-                    try {
-                        for (i in prodList.indices) {
-                            val prodName = prodList[i].material_name
-                            val productId = prodList[i].matnr
-                            val qty = prodList[i].quantity
-                            val tp = prodList[i].tp
-                            val vat = prodList[i].vat
-
-                            db.saveData(
-                                item.billing_doc_no,
-                                productId,
-                                prodName,
-                                qty.toString(),
-                                tp.toString(),
-                                vat.toString(),
-                                "",
-                                ""
-                            )
-
-
-                        }
-                    }catch (e:NumberFormatException){
-                        e.printStackTrace()
-                    }
-
-                }
-
-
-
                 val intent = Intent(itemView.context, ProductListActivity::class.java)
                     .putExtra("product_list", jsonStringItem)
                     .putExtra("invoice_id", item.billing_doc_no)
