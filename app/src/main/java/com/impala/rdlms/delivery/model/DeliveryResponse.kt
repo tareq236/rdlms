@@ -19,6 +19,7 @@ data class DeliveryData(
     val customer_mobile: String,
     val latitude: Double,
     val longitude: Double,
+    val delivery_status: String,
     val invoice_list: List<Invoice>
 )
 
@@ -57,6 +58,8 @@ data class Product(
     val brand_description: String,
     val brand_name: String,
     val delivery_quantity: Int,
-    val delivery_net_val: Double
+    val delivery_net_val: Double,
+    val return_quantity: Int,
+    val return_net_val: Double
 )
 

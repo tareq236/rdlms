@@ -22,4 +22,11 @@ class SessionManager(context: Context) {
         get() = sharedPreferences.getBoolean("is_start_work", false)
         set(isStartWork) = sharedPreferences.edit().putBoolean("is_start_work", isStartWork!!).apply()
 
+    var deliveryType: String?
+        get() = sharedPreferences.getString("delivery_type", "")
+        set(deliveryType) = sharedPreferences.edit().putString("delivery_type", deliveryType!!).apply()
+    var cashCollectionType: String?
+        get() = sharedPreferences.getString("cash_collection_type", "")
+        set(cashCollectionType) = sharedPreferences.edit().putString("cash_collection_type", cashCollectionType!!).apply()
+
 }

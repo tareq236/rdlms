@@ -1,16 +1,14 @@
-package com.impala.rdlms.delivery
+package com.impala.rdlms.cash_collection
 
-import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.impala.rdlms.R
+import com.impala.rdlms.databinding.ActivityCashCollectionBinding
 import com.impala.rdlms.databinding.ActivityDeliveryRemainingBinding
+import com.impala.rdlms.delivery.DeliveryAdapter
 import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.delivery.model.DeliveryResponse
 import com.impala.rdlms.utils.ApiService
@@ -18,19 +16,17 @@ import com.impala.rdlms.utils.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
-class DeliveryRemainingActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityDeliveryRemainingBinding
+class CashCollectionActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityCashCollectionBinding
     private lateinit var loadingDialog: Dialog
     private lateinit var sessionManager: SessionManager
     lateinit var adapter: DeliveryAdapter
+    private var cashCollectionType: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDeliveryRemainingBinding.inflate(layoutInflater)
+        binding = ActivityCashCollectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -45,14 +41,16 @@ class DeliveryRemainingActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
 
+        cashCollectionType = sessionManager.deliveryType.toString()
+
         getDeliveryRemainingList()
     }
-
 
     private fun getDeliveryRemainingList() {
         showLoadingDialog()
         val apiService = ApiService.CreateApi1()
-        apiService.getDeliveryRemainingList(sessionManager.userId.toString(),"Remaining").enqueue(object : Callback<DeliveryResponse> {
+        apiService.getCashCollectionRemainingList(sessionManager.userId.toString(),cashCollectionType).enqueue(object :
+            Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 if (response.isSuccessful) {
                     val response = response.body()

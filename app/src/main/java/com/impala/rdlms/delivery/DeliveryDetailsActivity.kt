@@ -1,18 +1,15 @@
 package com.impala.rdlms.delivery
 
-import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.impala.rdlms.R
 import com.impala.rdlms.databinding.ActivityDeliveryRemainingDetailsBinding
 import com.impala.rdlms.delivery.model.DeliveryData
-import com.impala.rdlms.delivery.model.DeliveryResponse
 import com.impala.rdlms.delivery.model.Invoice
 
-class DeliveryRemainingDetailsActivity : AppCompatActivity() {
+class DeliveryDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeliveryRemainingDetailsBinding
     lateinit var adapter: InvoiceListAdapter
 
@@ -36,8 +33,6 @@ class DeliveryRemainingDetailsActivity : AppCompatActivity() {
         Log.d("delv_details", deliveryDetailsString!!)
         val invoiceList = deliveryDetailsM.invoice_list
 
-
-
         val date = deliveryDetailsM.billing_date
         val routeName = deliveryDetailsM.route_name
         val daName = deliveryDetailsM.da_name
@@ -51,7 +46,6 @@ class DeliveryRemainingDetailsActivity : AppCompatActivity() {
         binding.customerNameId.text = custName
         binding.customerAddressId.text = custAddress
         binding.customerMobileId.text = custMobile
-
 
         adapter.addData(invoiceList as MutableList<Invoice>)
     }

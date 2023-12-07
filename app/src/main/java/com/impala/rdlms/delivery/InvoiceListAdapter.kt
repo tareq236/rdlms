@@ -12,11 +12,14 @@ import com.impala.rdlms.R
 import com.impala.rdlms.databinding.ItemInvoiceListBinding
 import com.impala.rdlms.db.DatabaseHelper
 import com.impala.rdlms.delivery.model.Invoice
+import com.impala.rdlms.utils.SessionManager
 
 class InvoiceListAdapter(val context: Context) :
     RecyclerView.Adapter<InvoiceListAdapter.ViewHolder>() {
 
     var list: MutableList<Invoice> = mutableListOf()
+
+    private lateinit var sessionManager: SessionManager
 
     fun addData(allCus: MutableList<Invoice>) {
         list.addAll(allCus)
@@ -40,6 +43,7 @@ class InvoiceListAdapter(val context: Context) :
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        sessionManager = SessionManager(context)
         val item = list[position]
         with(holder) {
             var totalNetVal = 0.0
@@ -53,6 +57,18 @@ class InvoiceListAdapter(val context: Context) :
             binding.txvDeliveryStatus.text = item.delivery_status
             binding.txvInvoiceQty.text = totalQty.toString()
             binding.txvInvoiceAmount.text = totalNetVal.toString()
+
+            if(sessionManager.deliveryType.toString() != "Remaining"){
+                var dvTotalNetVal = 0.0
+                var dvTotalQty = 0.0
+                for (product in item.product_list) {
+                    dvTotalNetVal += product.delivery_net_val
+                    dvTotalQty += product.delivery_quantity
+                }
+                binding.llDeliveryReport.visibility = View.VISIBLE
+                binding.txvDeliveredQty.text = dvTotalQty.toString()
+                binding.txvDeliveredAmount.text = dvTotalNetVal.toString()
+            }
 
             binding.mcvItem.setOnClickListener {
                 val gson = Gson()

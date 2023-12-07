@@ -3,6 +3,8 @@ package com.impala.rdlms.utils
 import com.google.gson.JsonObject
 import com.impala.rdlms.attendance.model.AttendanceResponse
 import com.impala.rdlms.delivery.model.DeliveryResponse
+import com.impala.rdlms.delivery.model.DeliverySave
+import com.impala.rdlms.delivery.model.DeliverySaveResponse
 import com.impala.rdlms.models.DashboardResponse
 import com.impala.rdlms.models.LoginRequest
 import com.impala.rdlms.models.LoginResponse
@@ -23,6 +25,16 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
+
+    @GET("api/v1/cash_collection/v2/list/{sap_id}")
+    fun getCashCollectionRemainingList(
+        @Path("sap_id") userId: String,
+        @Query("type") type: String,
+    ): Call<DeliveryResponse>
+
+    @POST("api/v1/delivery/save")
+    fun saveDeliveryData(@Body request: DeliverySave): Call<DeliverySaveResponse>
+
     @GET("api/v1/delivery/v2/list/{sap_id}")
     fun getDeliveryRemainingList(
         @Path("sap_id") userId: String,

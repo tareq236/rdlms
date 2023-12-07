@@ -142,10 +142,12 @@
                    android:gravity="right"/>
            </LinearLayout>
            <LinearLayout
+               android:id="@+id/llDeliveryReport"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="horizontal"
-               android:background="#43D1D1D1">
+               android:background="#43D1D1D1"
+               android:visibility="gone">
                <TextView
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"

@@ -11,7 +11,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.impala.rdlms.auth.LoginActivity
-import com.impala.rdlms.databinding.ActivityMainBinding
 import com.impala.rdlms.utils.SessionManager
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -20,13 +19,11 @@ import android.os.Handler
 import android.os.Looper
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.material.card.MaterialCardView
-import com.impala.rdlms.attendance.EveningAttendanceActivity
-import com.impala.rdlms.delivery.DeliveryRemainingActivity
+import com.impala.rdlms.cash_collection.CashCollectionActivity
+import com.impala.rdlms.delivery.DeliveryActivity
 import com.impala.rdlms.models.DashboardResponse
 import com.impala.rdlms.models.DashboardResult
-import com.impala.rdlms.models.LoginResponse
 import com.impala.rdlms.utils.ApiService
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,11 +62,13 @@ class MainActivity : AppCompatActivity() {
 
         val mcvDeliveryRemaining: MaterialCardView = findViewById(R.id.mcv_delivery_remaining)
         val mcvDeliveryDone: MaterialCardView = findViewById(R.id.mcv_delivery_done)
+        val mcvCashCollectionRemaining: MaterialCardView = findViewById(R.id.mcv_cash_collection_remaining)
+        val mcvCashCollectionDone: MaterialCardView = findViewById(R.id.mcv_cash_collection_done)
 
         txvTime = findViewById(R.id.txv_time)
         txvDate = findViewById(R.id.txv_date)
         val txvUserName: TextView = findViewById(R.id.txv_user_name)
-        txvUserName.text = sessionManager.fullName
+        txvUserName.text = sessionManager.fullName+"("+sessionManager.userId+")"
 
         // Initialize the update time Runnable
         updateTimeRunnable = object : Runnable {
@@ -110,7 +109,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         mcvDeliveryRemaining.setOnClickListener {
-            val intent = Intent(this@MainActivity, DeliveryRemainingActivity::class.java)
+            sessionManager.deliveryType = "Remaining"
+            val intent = Intent(this@MainActivity, DeliveryActivity::class.java)
+            startActivity(intent)
+        }
+        mcvDeliveryDone.setOnClickListener {
+            sessionManager.deliveryType = "Done"
+            val intent = Intent(this@MainActivity, DeliveryActivity::class.java)
+            startActivity(intent)
+        }
+        mcvCashCollectionRemaining.setOnClickListener {
+            sessionManager.deliveryType = "Remaining"
+            val intent = Intent(this@MainActivity, CashCollectionActivity::class.java)
+            startActivity(intent)
+        }
+        mcvCashCollectionDone.setOnClickListener {
+            sessionManager.deliveryType = "Done"
+            val intent = Intent(this@MainActivity, CashCollectionActivity::class.java)
             startActivity(intent)
         }
 

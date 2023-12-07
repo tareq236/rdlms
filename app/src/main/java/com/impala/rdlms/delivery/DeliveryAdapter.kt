@@ -6,14 +6,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.impala.rdlms.R
 import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.databinding.ItemDeliveryBinding
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 
 class DeliveryAdapter(val context: Context) : RecyclerView.Adapter<DeliveryAdapter.ViewHolder>() {
 
@@ -62,7 +60,7 @@ class DeliveryAdapter(val context: Context) : RecyclerView.Adapter<DeliveryAdapt
             binding.mcvItem.setOnClickListener {
                 val gson = Gson()
                 val jsonStringItem = gson.toJson(item)
-                val intent = Intent(itemView.context, DeliveryRemainingDetailsActivity::class.java)
+                val intent = Intent(itemView.context, DeliveryDetailsActivity::class.java)
                     .putExtra("delivery_details",jsonStringItem)
                 itemView.context.startActivity(intent)
             }
