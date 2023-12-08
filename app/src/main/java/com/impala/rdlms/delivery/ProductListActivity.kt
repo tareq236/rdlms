@@ -22,20 +22,21 @@ import com.impala.rdlms.delivery.model.DeliveryList
 import com.impala.rdlms.delivery.model.DeliverySave
 import com.impala.rdlms.delivery.model.DeliverySaveResponse
 import com.impala.rdlms.delivery.model.Invoice
+import com.impala.rdlms.delivery.model.Product
 import com.impala.rdlms.utils.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryItem {
+class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDeliveryItem {
     private lateinit var binding: ActivityProductListBinding
     private val locationPermissionCode = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var adapter: ProductListAdapter
-    var qty =0
-    var invoiceId =""
+    var qty = 0
+    var invoiceId = ""
     lateinit var transportArr: Array<String>
-    lateinit var deliveryList:MutableList<DeliveryList>
+    lateinit var deliveryList: MutableList<DeliveryList>
     private lateinit var loadingDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,25 +74,31 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryI
         )
     }
 
-    private fun initView(){
+    private fun initView() {
         invoiceId = this.intent.getStringExtra("invoice_id")!!
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
+        val totalAmount = this.intent.getStringExtra("total_amount")
+        binding.totalAmountId.text = totalAmount
+
         deliveryList = mutableListOf()
         val productList = deliveryDetailsM.product_list
 
-        for (i in productList){
-            val deliveryItem = DeliveryList(i.matnr,i.batch,i.quantity,i.tp,i.vat,i.net_val,0,0.0,0,0.0)
+        for (i in productList) {
+            val deliveryItem =
+                DeliveryList(i.matnr, i.batch, i.quantity, i.tp, i.vat, i.net_val, 0, 0.0, 0, 0.0)
             deliveryList.add(deliveryItem)
         }
 
         transportArr = resources.getStringArray(R.array.transportType)
-        adapter = ProductListAdapter(productList,this)
+        adapter = ProductListAdapter("regular", this)
         val linearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
+
+        adapter.addData(productList as MutableList<Product>)
 
         binding.txvBillDocNo.text = deliveryDetailsM.billing_doc_no
         binding.customerNameId.text = deliveryDetailsM.customer_name
@@ -107,39 +114,42 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryI
         )
 
         binding.allDeliveredId.setOnClickListener {
-            getCurrentLocation(object : OnSuccessListener<Location> {
-                override fun onSuccess(location: Location?) {
-                    if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
-                        if (validateInput(binding.actvTransportType.text.toString())) {
-                            var deliveryList = DeliverySave(
-                                billing_doc_no = deliveryDetailsM.billing_doc_no,
-                                billing_date = deliveryDetailsM.billing_date,
-                                route_code = deliveryDetailsM.route_code,
-                                partner = deliveryDetailsM.partner,
-                                gate_pass_no = deliveryDetailsM.gate_pass_no,
-                                da_code = deliveryDetailsM.da_code.toString(),
-                                vehicle_no = deliveryDetailsM.vehicle_no,
-                                delivery_latitude = latitude.toString(),
-                                delivery_longitude = longitude.toString(),
-                                transport_type = binding.actvTransportType.text.toString(),
-                                delivery_status = "Done",
-                                last_status = "delivery",
-                                type = "delivery",
-                                deliverys = deliveryList
-                            )
+            getCurrentLocation { location ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    if (validateInput(binding.actvTransportType.text.toString())) {
+                        val deliveryList = DeliverySave(
+                            billing_doc_no = deliveryDetailsM.billing_doc_no,
+                            billing_date = deliveryDetailsM.billing_date,
+                            route_code = deliveryDetailsM.route_code,
+                            partner = deliveryDetailsM.partner,
+                            gate_pass_no = deliveryDetailsM.gate_pass_no,
+                            da_code = deliveryDetailsM.da_code.toString(),
+                            vehicle_no = deliveryDetailsM.vehicle_no,
+                            delivery_latitude = latitude.toString(),
+                            delivery_longitude = longitude.toString(),
+                            transport_type = binding.actvTransportType.text.toString(),
+                            delivery_status = "Done",
+                            last_status = "delivery",
+                            type = "delivery",
+                            deliverys = deliveryList
+                        )
 
-                            val apiService = ApiService.CreateApi1()
-                            showLoadingDialog()
-                            // Make the API call
-                            apiService.saveDeliveryData(deliveryList).enqueue(object : Callback<DeliverySaveResponse> {
-                                override fun onResponse(call: Call<DeliverySaveResponse>, response: Response<DeliverySaveResponse>) {
-                                    if (response.isSuccessful){
+                        val apiService = ApiService.CreateApi1()
+                        showLoadingDialog()
+                        // Make the API call
+                        apiService.saveDeliveryData(deliveryList)
+                            .enqueue(object : Callback<DeliverySaveResponse> {
+                                override fun onResponse(
+                                    call: Call<DeliverySaveResponse>,
+                                    response: Response<DeliverySaveResponse>
+                                ) {
+                                    if (response.isSuccessful) {
                                         // Handle successful login response
                                         val response = response.body()
                                         if (response != null) {
-                                            if(response.success){
+                                            if (response.success) {
                                                 dismissLoadingDialog()
                                                 showFDialogBox(
                                                     SweetAlertDialog.SUCCESS_TYPE,
@@ -147,31 +157,164 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryI
                                                     "Save Successfully  "
                                                 )
 
-                                            }else{
+                                            } else {
                                                 dismissLoadingDialog()
-                                                showDialogBox(SweetAlertDialog.WARNING_TYPE, "Waring", response.message)
+                                                showDialogBox(
+                                                    SweetAlertDialog.WARNING_TYPE,
+                                                    "Waring",
+                                                    response.message
+                                                )
                                             }
-                                        }else{
+                                        } else {
                                             dismissLoadingDialog()
-                                            showDialogBox(SweetAlertDialog.ERROR_TYPE, "Error", "Response NULL value. Try later")
+                                            showDialogBox(
+                                                SweetAlertDialog.ERROR_TYPE,
+                                                "Error",
+                                                "Response NULL value. Try later"
+                                            )
                                         }
-                                    }else{
+                                    } else {
                                         dismissLoadingDialog()
-                                        showDialogBox(SweetAlertDialog.ERROR_TYPE, "Error", "Response failed. Try later")
+                                        showDialogBox(
+                                            SweetAlertDialog.ERROR_TYPE,
+                                            "Error",
+                                            "Response failed. Try later"
+                                        )
                                     }
                                 }
 
-                                override fun onFailure(call: Call<DeliverySaveResponse>, t: Throwable) {
+                                override fun onFailure(
+                                    call: Call<DeliverySaveResponse>,
+                                    t: Throwable
+                                ) {
                                     dismissLoadingDialog()
-                                    showDialogBox(SweetAlertDialog.ERROR_TYPE, "Error", "Network error")
+                                    showDialogBox(
+                                        SweetAlertDialog.ERROR_TYPE,
+                                        "Error",
+                                        "Network error"
+                                    )
                                 }
                             })
-                        }
-                    }else{
-                        showToast("Location data not available.")
                     }
+                } else {
+                    showToast("Location data not available.")
                 }
-            })
+            }
+        }
+
+        binding.allReceivedId.setOnClickListener {
+            val adapter = ProductListAdapter("all_received", this)
+
+            val linearLayoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            binding.recyclerView.layoutManager = linearLayoutManager
+            binding.recyclerView.adapter = adapter
+            binding.recyclerView.setHasFixedSize(true)
+
+            adapter.addData(productList as MutableList<Product>)
+
+        }
+
+        binding.allReturnId.setOnClickListener {
+            val adapter = ProductListAdapter("all_return", this)
+
+            val linearLayoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            binding.recyclerView.layoutManager = linearLayoutManager
+            binding.recyclerView.adapter = adapter
+            binding.recyclerView.setHasFixedSize(true)
+
+            adapter.addData(productList as MutableList<Product>)
+
+        }
+
+        binding.cancelId.setOnClickListener {
+            getCurrentLocation { location ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    if (validateInput(binding.actvTransportType.text.toString())) {
+                        val deliveryList = DeliverySave(
+                            billing_doc_no = deliveryDetailsM.billing_doc_no,
+                            billing_date = deliveryDetailsM.billing_date,
+                            route_code = deliveryDetailsM.route_code,
+                            partner = deliveryDetailsM.partner,
+                            gate_pass_no = deliveryDetailsM.gate_pass_no,
+                            da_code = deliveryDetailsM.da_code.toString(),
+                            vehicle_no = deliveryDetailsM.vehicle_no,
+                            delivery_latitude = latitude.toString(),
+                            delivery_longitude = longitude.toString(),
+                            transport_type = binding.actvTransportType.text.toString(),
+                            delivery_status = "Cancel",
+                            last_status = "delivery",
+                            type = "delivery",
+                            deliverys = deliveryList
+                        )
+
+                        val apiService = ApiService.CreateApi1()
+                        showLoadingDialog()
+                        // Make the API call
+                        apiService.saveDeliveryData(deliveryList)
+                            .enqueue(object : Callback<DeliverySaveResponse> {
+                                override fun onResponse(
+                                    call: Call<DeliverySaveResponse>,
+                                    response: Response<DeliverySaveResponse>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        // Handle successful login response
+                                        val response = response.body()
+                                        if (response != null) {
+                                            if (response.success) {
+                                                dismissLoadingDialog()
+                                                showFDialogBox(
+                                                    SweetAlertDialog.SUCCESS_TYPE,
+                                                    "SUCCESS",
+                                                    "Save Successfully  "
+                                                )
+
+                                            } else {
+                                                dismissLoadingDialog()
+                                                showDialogBox(
+                                                    SweetAlertDialog.WARNING_TYPE,
+                                                    "Waring",
+                                                    response.message
+                                                )
+                                            }
+                                        } else {
+                                            dismissLoadingDialog()
+                                            showDialogBox(
+                                                SweetAlertDialog.ERROR_TYPE,
+                                                "Error",
+                                                "Response NULL value. Try later"
+                                            )
+                                        }
+                                    } else {
+                                        dismissLoadingDialog()
+                                        showDialogBox(
+                                            SweetAlertDialog.ERROR_TYPE,
+                                            "Error",
+                                            "Response failed. Try later"
+                                        )
+                                    }
+                                }
+
+                                override fun onFailure(
+                                    call: Call<DeliverySaveResponse>,
+                                    t: Throwable
+                                ) {
+                                    dismissLoadingDialog()
+                                    showDialogBox(
+                                        SweetAlertDialog.ERROR_TYPE,
+                                        "Error",
+                                        "Network error"
+                                    )
+                                }
+                            })
+                    }
+                } else {
+                    showToast("Location data not available.")
+                }
+            }
         }
     }
 
@@ -193,7 +336,12 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryI
         return true
     }
 
-    private fun showFDialogBox(type: Int, title: String, message: String, callback: (() -> Unit)? = null) {
+    private fun showFDialogBox(
+        type: Int,
+        title: String,
+        message: String,
+        callback: (() -> Unit)? = null
+    ) {
         val sweetAlertDialog = SweetAlertDialog(this, type)
             .setTitleText(title)
             .setContentText(message)
@@ -206,7 +354,12 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryI
         sweetAlertDialog.show()
     }
 
-    private fun showDialogBox(type: Int, title: String, message: String, callback: (() -> Unit)? = null) {
+    private fun showDialogBox(
+        type: Int,
+        title: String,
+        message: String,
+        callback: (() -> Unit)? = null
+    ) {
         val sweetAlertDialog = SweetAlertDialog(this, type)
             .setTitleText(title)
             .setContentText(message)
@@ -216,6 +369,7 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryI
             }
         sweetAlertDialog.show()
     }
+
     private fun getCurrentLocation(callback: OnSuccessListener<Location>) {
         try {
             fusedLocationClient.lastLocation
@@ -230,7 +384,14 @@ class ProductListActivity : AppCompatActivity(),ProductListAdapter.IAddDeliveryI
     private fun showToast(message: String) {
         // Implement showToast method to display messages
     }
-    override fun deliveryList(matnr:String,receivedQty:String,receiveAmountId:String,returnQty:String,returnAmountId:String) {
+
+    override fun deliveryList(
+        matnr: String,
+        receivedQty: String,
+        receiveAmountId: String,
+        returnQty: String,
+        returnAmountId: String
+    ) {
         val itemToUpdate = deliveryList.find { it.matnr == matnr }
         itemToUpdate?.apply {
             delivery_quantity = receivedQty.toInt()

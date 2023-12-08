@@ -30,6 +30,7 @@ class DeliveryDetailsActivity : AppCompatActivity() {
 
         val deliveryDetailsString = this.intent.getStringExtra("delivery_details")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, DeliveryData::class.java)
+        val totalInvoice = this.intent.getStringExtra("total_amount")!!
         Log.d("delv_details", deliveryDetailsString!!)
         val invoiceList = deliveryDetailsM.invoice_list
 
@@ -40,12 +41,14 @@ class DeliveryDetailsActivity : AppCompatActivity() {
         val custAddress = deliveryDetailsM.customer_address
         val custMobile = deliveryDetailsM.customer_mobile
 
+
         binding.dateId.text = date
         binding.routeNameId.text = routeName
         binding.daNameId.text = daName
         binding.customerNameId.text = custName
         binding.customerAddressId.text = custAddress
         binding.customerMobileId.text = custMobile
+        binding.totalAmountId.text = totalInvoice
 
         adapter.addData(invoiceList as MutableList<Invoice>)
     }

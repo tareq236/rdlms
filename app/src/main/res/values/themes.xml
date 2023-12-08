@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.RDLMS" parent="Base.Theme.RDLMS" />
+
+    <style name="CustomTextInputEditText">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
 </resources>

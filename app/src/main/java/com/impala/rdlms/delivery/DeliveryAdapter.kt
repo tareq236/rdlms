@@ -62,6 +62,7 @@ class DeliveryAdapter(val context: Context) : RecyclerView.Adapter<DeliveryAdapt
                 val jsonStringItem = gson.toJson(item)
                 val intent = Intent(itemView.context, DeliveryDetailsActivity::class.java)
                     .putExtra("delivery_details",jsonStringItem)
+                    .putExtra("total_amount",binding.txvAmount.text.toString())
                 itemView.context.startActivity(intent)
             }
         }

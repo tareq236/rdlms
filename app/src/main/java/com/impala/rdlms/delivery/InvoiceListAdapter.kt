@@ -56,7 +56,7 @@ class InvoiceListAdapter(val context: Context) :
             binding.txvBillDocNo.text = item.billing_doc_no
             binding.txvDeliveryStatus.text = item.delivery_status
             binding.txvInvoiceQty.text = totalQty.toString()
-            binding.txvInvoiceAmount.text = totalNetVal.toString()
+            binding.txvInvoiceAmount.text = roundTheNumber(totalNetVal)
 
             if(sessionManager.deliveryType.toString() != "Remaining"){
                 var dvTotalNetVal = 0.0
@@ -76,6 +76,7 @@ class InvoiceListAdapter(val context: Context) :
                 val intent = Intent(itemView.context, ProductListActivity::class.java)
                     .putExtra("product_list", jsonStringItem)
                     .putExtra("invoice_id", item.billing_doc_no)
+                    .putExtra("total_amount", binding.txvInvoiceAmount.text.toString())
                 itemView.context.startActivity(intent)
             }
         }
@@ -83,5 +84,11 @@ class InvoiceListAdapter(val context: Context) :
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    private fun roundTheNumber(numInDouble: Double): String {
+
+        return "%.2f".format(numInDouble)
+
     }
 }
