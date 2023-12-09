@@ -15,7 +15,11 @@ import com.impala.rdlms.db.ProductModel
 import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.delivery.model.Product
 
-class ProductListAdapter(private val flag: String, val clickManage: IAddDeliveryItem,val flag1:String) :
+class ProductListAdapter(
+    private val flag: String,
+    val clickManage: IAddDeliveryItem,
+    val flag1: String
+) :
     RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
     var list: MutableList<Product> = mutableListOf()
 
@@ -40,10 +44,10 @@ class ProductListAdapter(private val flag: String, val clickManage: IAddDelivery
         val item = list[position]
         // holder.bind(item)
         with(holder) {
-            if (flag1=="cash"){
+            if (flag1 == "cash") {
                 binding.linReceivedQty.visibility = View.GONE
                 binding.linReceivedAmount.visibility = View.GONE
-            }else {
+            } else {
                 binding.linReceivedQty.visibility = View.VISIBLE
                 binding.linReceivedAmount.visibility = View.VISIBLE
             }
@@ -167,17 +171,20 @@ class ProductListAdapter(private val flag: String, val clickManage: IAddDelivery
                 binding.totalQty.text = item.quantity.toString()
                 binding.totalAmountId.text = item.net_val.toString()
                 binding.receivedAmountId.text =
-                    (binding.receivedQty.text.toString().toDouble() * item.tp).toString()
+                    roundTheNumber(binding.receivedQty.text.toString().toDouble() * item.tp)
                 val receivedQty = binding.receivedQty.text.toString().toInt()
                 val result = invoiceQty - receivedQty
                 binding.returnQty.setText(result.toString())
 
             } else if (flag == "all_return") {
+                binding.productName.text = item.material_name
                 val totalQty = item.quantity
                 binding.totalQty.text = totalQty.toString()
                 binding.returnQty.setText(totalQty.toString())
-                binding.returnAmountId.text = (binding.returnQty.text.toString()
-                    .toDouble() * item.tp).toString()
+                binding.returnAmountId.text = roundTheNumber(
+                    binding.returnQty.text.toString()
+                        .toDouble() * item.tp
+                )
                 val returnQty = binding.returnQty.text.toString().toInt()
                 val result = totalQty - returnQty
                 binding.receivedQty.setText(result.toString())
@@ -203,6 +210,12 @@ class ProductListAdapter(private val flag: String, val clickManage: IAddDelivery
             returnQty: String,
             returnAmountId: String
         )
+    }
+
+    private fun roundTheNumber(numInDouble: Double): String {
+
+        return "%.2f".format(numInDouble)
+
     }
 
 }

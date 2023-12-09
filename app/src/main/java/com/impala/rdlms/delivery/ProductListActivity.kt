@@ -5,10 +5,12 @@ import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +30,7 @@ import com.impala.rdlms.utils.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDeliveryItem {
     private lateinit var binding: ActivityProductListBinding
@@ -337,6 +340,35 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 }
             }
         }
+
+
+
+        binding.receivedAmountId.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                if (s.toString().isNotEmpty()) {
+                    try {
+                        val totalAmount = binding.totalAmountId.text.toString()
+                        val iTotalAmount = totalAmount.toDouble()
+                        val receivedAmount = iTotalAmount - s.toString().toDouble()
+                        binding.dueAmountId.text=roundTheNumber(receivedAmount)
+                    }catch (e:NumberFormatException){
+                        e.printStackTrace()
+                    }
+
+
+                }
+
+            }
+        })
     }
 
     private fun showLoadingDialog() {
@@ -420,5 +452,11 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             return_quantity = returnQty.toInt()
             return_net_val = returnAmountId.toDouble()
         }
+    }
+
+    private fun roundTheNumber(numInDouble: Double): String {
+
+        return "%.2f".format(numInDouble)
+
     }
 }
