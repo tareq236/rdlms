@@ -87,6 +87,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
                 <LinearLayout
+                    android:id="@+id/linReceivedQty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -133,6 +134,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
                 <LinearLayout
+                    android:id="@+id/linReceivedAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"

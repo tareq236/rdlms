@@ -36,7 +36,7 @@
             android:name=".delivery.DeliveryDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".delivery.DeliveryActivity"
+            android:name=".delivery.DeliveryRemainingActivity"
             android:exported="false" />
 
         <provider

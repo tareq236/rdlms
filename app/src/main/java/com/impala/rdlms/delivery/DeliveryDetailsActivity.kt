@@ -12,6 +12,7 @@ import com.impala.rdlms.delivery.model.Invoice
 class DeliveryDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeliveryRemainingDetailsBinding
     lateinit var adapter: InvoiceListAdapter
+    var flag=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +22,8 @@ class DeliveryDetailsActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
-        adapter = InvoiceListAdapter(this)
+        flag=this.intent.getStringExtra("flag")!!
+        adapter = InvoiceListAdapter(this,flag)
         val linearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager

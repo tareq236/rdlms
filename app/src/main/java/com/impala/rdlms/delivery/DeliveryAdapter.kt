@@ -13,7 +13,7 @@ import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.databinding.ItemDeliveryBinding
 import java.text.DecimalFormat
 
-class DeliveryAdapter(val context: Context) : RecyclerView.Adapter<DeliveryAdapter.ViewHolder>() {
+class DeliveryAdapter(val context: Context,val flag:String) : RecyclerView.Adapter<DeliveryAdapter.ViewHolder>() {
 
     var list: MutableList<DeliveryData> = mutableListOf()
 
@@ -63,6 +63,7 @@ class DeliveryAdapter(val context: Context) : RecyclerView.Adapter<DeliveryAdapt
                 val intent = Intent(itemView.context, DeliveryDetailsActivity::class.java)
                     .putExtra("delivery_details",jsonStringItem)
                     .putExtra("total_amount",binding.txvAmount.text.toString())
+                    .putExtra("flag",flag)
                 itemView.context.startActivity(intent)
             }
         }

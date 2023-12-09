@@ -20,7 +20,7 @@ import android.os.Looper
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.material.card.MaterialCardView
 import com.impala.rdlms.cash_collection.CashCollectionActivity
-import com.impala.rdlms.delivery.DeliveryActivity
+import com.impala.rdlms.delivery.DeliveryRemainingActivity
 import com.impala.rdlms.models.DashboardResponse
 import com.impala.rdlms.models.DashboardResult
 import com.impala.rdlms.utils.ApiService
@@ -110,12 +110,12 @@ class MainActivity : AppCompatActivity() {
 
         mcvDeliveryRemaining.setOnClickListener {
             sessionManager.deliveryType = "Remaining"
-            val intent = Intent(this@MainActivity, DeliveryActivity::class.java)
+            val intent = Intent(this@MainActivity, DeliveryRemainingActivity::class.java)
             startActivity(intent)
         }
         mcvDeliveryDone.setOnClickListener {
             sessionManager.deliveryType = "Done"
-            val intent = Intent(this@MainActivity, DeliveryActivity::class.java)
+            val intent = Intent(this@MainActivity, DeliveryRemainingActivity::class.java)
             startActivity(intent)
         }
         mcvCashCollectionRemaining.setOnClickListener {

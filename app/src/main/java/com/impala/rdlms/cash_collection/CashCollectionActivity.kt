@@ -32,7 +32,7 @@ class CashCollectionActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
-        adapter = DeliveryAdapter(this)
+        adapter = DeliveryAdapter(this,"cash")
         loadingDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Loading")
         sessionManager = SessionManager(this)
 

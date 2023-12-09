@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +39,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     lateinit var transportArr: Array<String>
     lateinit var deliveryList: MutableList<DeliveryList>
     private lateinit var loadingDialog: Dialog
+    var flag = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
+        flag = this.intent.getStringExtra("flag")!!
         // Initialize the loading dialog
         loadingDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
             .setTitleText("Loading")
@@ -75,6 +78,24 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     }
 
     private fun initView() {
+        //hide layout
+        if(flag=="cash"){
+            binding.linTransportType.visibility = View.GONE
+            binding.allReceivedId.visibility = View.GONE
+            binding.cancelId.visibility = View.GONE
+            binding.allDeliveredId.visibility = View.GONE
+            binding.cashCollectionId.visibility = View.VISIBLE
+            binding.linReceivedAmount.visibility = View.VISIBLE
+        }else{
+            binding.linTransportType.visibility = View.VISIBLE
+            binding.allReceivedId.visibility = View.VISIBLE
+            binding.cancelId.visibility = View.VISIBLE
+            binding.allDeliveredId.visibility = View.VISIBLE
+            binding.cashCollectionId.visibility = View.GONE
+            binding.linReceivedAmount.visibility = View.GONE
+        }
+
+
         invoiceId = this.intent.getStringExtra("invoice_id")!!
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
@@ -91,7 +112,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         transportArr = resources.getStringArray(R.array.transportType)
-        adapter = ProductListAdapter("regular", this)
+        adapter = ProductListAdapter("regular", this,flag)
         val linearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
@@ -203,7 +224,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         binding.allReceivedId.setOnClickListener {
-            val adapter = ProductListAdapter("all_received", this)
+            val adapter = ProductListAdapter("all_received", this,flag)
 
             val linearLayoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -216,7 +237,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         binding.allReturnId.setOnClickListener {
-            val adapter = ProductListAdapter("all_return", this)
+            val adapter = ProductListAdapter("all_return", this,flag)
 
             val linearLayoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -348,7 +369,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             .setConfirmClickListener {
                 it.dismissWithAnimation()
                 callback?.invoke()
-                val intent = Intent(this@ProductListActivity, DeliveryActivity::class.java)
+                val intent = Intent(this@ProductListActivity, DeliveryRemainingActivity::class.java)
                 startActivity(intent)
             }
         sweetAlertDialog.show()

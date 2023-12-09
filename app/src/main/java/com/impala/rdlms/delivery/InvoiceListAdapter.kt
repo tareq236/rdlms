@@ -14,7 +14,7 @@ import com.impala.rdlms.db.DatabaseHelper
 import com.impala.rdlms.delivery.model.Invoice
 import com.impala.rdlms.utils.SessionManager
 
-class InvoiceListAdapter(val context: Context) :
+class InvoiceListAdapter(val context: Context,val flag:String) :
     RecyclerView.Adapter<InvoiceListAdapter.ViewHolder>() {
 
     var list: MutableList<Invoice> = mutableListOf()
@@ -77,6 +77,7 @@ class InvoiceListAdapter(val context: Context) :
                     .putExtra("product_list", jsonStringItem)
                     .putExtra("invoice_id", item.billing_doc_no)
                     .putExtra("total_amount", binding.txvInvoiceAmount.text.toString())
+                    .putExtra("flag", flag)
                 itemView.context.startActivity(intent)
             }
         }

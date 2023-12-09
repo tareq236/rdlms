@@ -15,7 +15,7 @@ import com.impala.rdlms.db.ProductModel
 import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.delivery.model.Product
 
-class ProductListAdapter(private val flag: String, val clickManage: IAddDeliveryItem) :
+class ProductListAdapter(private val flag: String, val clickManage: IAddDeliveryItem,val flag1:String) :
     RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
     var list: MutableList<Product> = mutableListOf()
 
@@ -40,6 +40,14 @@ class ProductListAdapter(private val flag: String, val clickManage: IAddDelivery
         val item = list[position]
         // holder.bind(item)
         with(holder) {
+            if (flag1=="cash"){
+                binding.linReceivedQty.visibility = View.GONE
+                binding.linReceivedAmount.visibility = View.GONE
+            }else {
+                binding.linReceivedQty.visibility = View.VISIBLE
+                binding.linReceivedAmount.visibility = View.VISIBLE
+            }
+
 
             if (flag == "regular") {
                 binding.productName.text = item.material_name

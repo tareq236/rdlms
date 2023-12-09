@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DeliveryActivity : AppCompatActivity() {
+class DeliveryRemainingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeliveryRemainingBinding
     private lateinit var loadingDialog: Dialog
     private lateinit var sessionManager: SessionManager
@@ -29,7 +29,7 @@ class DeliveryActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
-        adapter = DeliveryAdapter(this)
+        adapter = DeliveryAdapter(this,"delivery")
         loadingDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Loading")
         sessionManager = SessionManager(this)
 
