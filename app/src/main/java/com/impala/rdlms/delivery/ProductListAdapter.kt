@@ -176,11 +176,119 @@ class ProductListAdapter(
                 val result = invoiceQty - receivedQty
                 binding.returnQty.setText(result.toString())
 
+
+                var isReceivedEdit: Boolean = false
+                var isReturnEdit: Boolean = false
+
+                binding.returnQty.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                        isReturnEdit = true
+                        if (s.toString().isNotEmpty()) {
+                            val totalQty = item.quantity
+                            if (s.toString().toInt() <= totalQty) {
+                                binding.returnAmountId.text = (binding.returnQty.text.toString()
+                                    .toDouble() * item.tp).toString()
+                                val returnQty = s.toString().toInt()
+                                val result = totalQty - returnQty
+                                if (!isReceivedEdit) binding.receivedQty.setText(result.toString())
+                                clickManage.deliveryList(
+                                    item.matnr,
+                                    s.toString(),
+                                    binding.receivedAmountId.text.toString(),
+                                    binding.returnQty.text.toString(),
+                                    binding.returnAmountId.text.toString()
+                                )
+                            } else {
+                                binding.returnQty.setText("")
+                                binding.returnAmountId.text = "0"
+                                Toast.makeText(
+                                    itemView.context,
+                                    "Please input return quantity under or qual of order quantity",
+                                    Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        } else {
+                            if (!isReceivedEdit) binding.receivedQty.setText("")
+                            binding.returnAmountId.text = "0"
+                        }
+                        isReceivedEdit = false
+
+                    }
+
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                    }
+                })
+
+                binding.receivedQty.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                        isReceivedEdit = true
+                        if (s.toString().isNotEmpty()) {
+                            val totalQty = item.quantity
+                            if (s.toString().toInt() <= totalQty) {
+                                binding.receivedAmountId.text = (binding.receivedQty.text.toString()
+                                    .toDouble() * item.tp).toString()
+                                val receivedQty = s.toString().toInt()
+                                val result = totalQty - receivedQty
+                                if (!isReturnEdit) binding.returnQty.setText(result.toString())
+                                clickManage.deliveryList(
+                                    item.matnr,
+                                    s.toString(),
+                                    binding.receivedAmountId.text.toString(),
+                                    binding.returnQty.text.toString(),
+                                    binding.returnAmountId.text.toString()
+                                )
+                            } else {
+                                binding.receivedQty.setText("")
+                                binding.receivedAmountId.text = "0"
+                                Toast.makeText(
+                                    itemView.context,
+                                    "Please input receive quantity under or qual of order quantity",
+                                    Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        } else {
+                            if (!isReturnEdit) binding.returnQty.setText("")
+                            binding.receivedAmountId.text = "0"
+                        }
+                        isReturnEdit = false
+                    }
+
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                    }
+                })
+
             } else if (flag == "all_return") {
                 binding.productName.text = item.material_name
                 val totalQty = item.quantity
                 binding.totalQty.text = totalQty.toString()
                 binding.returnQty.setText(totalQty.toString())
+                binding.totalAmountId.text = item.net_val.toString()
                 binding.returnAmountId.text = roundTheNumber(
                     binding.returnQty.text.toString()
                         .toDouble() * item.tp
@@ -188,6 +296,116 @@ class ProductListAdapter(
                 val returnQty = binding.returnQty.text.toString().toInt()
                 val result = totalQty - returnQty
                 binding.receivedQty.setText(result.toString())
+
+
+
+                var isReceivedEdit: Boolean = false
+                var isReturnEdit: Boolean = false
+
+                binding.returnQty.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                        isReturnEdit = true
+                        if (s.toString().isNotEmpty()) {
+                            val totalQty = item.quantity
+                            if (s.toString().toInt() <= totalQty) {
+                                binding.returnAmountId.text = (binding.returnQty.text.toString()
+                                    .toDouble() * item.tp).toString()
+                                val returnQty = s.toString().toInt()
+                                val result = totalQty - returnQty
+                                if (!isReceivedEdit) binding.receivedQty.setText(result.toString())
+                                clickManage.deliveryList(
+                                    item.matnr,
+                                    s.toString(),
+                                    binding.receivedAmountId.text.toString(),
+                                    binding.returnQty.text.toString(),
+                                    binding.returnAmountId.text.toString()
+                                )
+                            } else {
+                                binding.returnQty.setText("")
+                                binding.returnAmountId.text = "0"
+                                Toast.makeText(
+                                    itemView.context,
+                                    "Please input return quantity under or qual of order quantity",
+                                    Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        } else {
+                            if (!isReceivedEdit) binding.receivedQty.setText("")
+                            binding.returnAmountId.text = "0"
+                        }
+                        isReceivedEdit = false
+
+                    }
+
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                    }
+                })
+
+                binding.receivedQty.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                        isReceivedEdit = true
+                        if (s.toString().isNotEmpty()) {
+                            val totalQty = item.quantity
+                            if (s.toString().toInt() <= totalQty) {
+                                binding.receivedAmountId.text = (binding.receivedQty.text.toString()
+                                    .toDouble() * item.tp).toString()
+                                val receivedQty = s.toString().toInt()
+                                val result = totalQty - receivedQty
+                                if (!isReturnEdit) binding.returnQty.setText(result.toString())
+                                clickManage.deliveryList(
+                                    item.matnr,
+                                    s.toString(),
+                                    binding.receivedAmountId.text.toString(),
+                                    binding.returnQty.text.toString(),
+                                    binding.returnAmountId.text.toString()
+                                )
+                            } else {
+                                binding.receivedQty.setText("")
+                                binding.receivedAmountId.text = "0"
+                                Toast.makeText(
+                                    itemView.context,
+                                    "Please input receive quantity under or qual of order quantity",
+                                    Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        } else {
+                            if (!isReturnEdit) binding.returnQty.setText("")
+                            binding.receivedAmountId.text = "0"
+                        }
+                        isReturnEdit = false
+                    }
+
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                    }
+                })
+
+
             }
 
 
@@ -210,6 +428,7 @@ class ProductListAdapter(
             returnQty: String,
             returnAmountId: String
         )
+
     }
 
     private fun roundTheNumber(numInDouble: Double): String {

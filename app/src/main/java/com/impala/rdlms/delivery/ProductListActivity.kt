@@ -8,6 +8,7 @@ import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -89,6 +90,10 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.allDeliveredId.visibility = View.GONE
             binding.cashCollectionId.visibility = View.VISIBLE
             binding.linReceivedAmount.visibility = View.VISIBLE
+            binding.linDueAmountId.visibility = View.VISIBLE
+            binding.linReceivableAmount.visibility = View.VISIBLE
+            binding.linReturnAmount.visibility = View.VISIBLE
+
         }else{
             binding.linTransportType.visibility = View.VISIBLE
             binding.allReceivedId.visibility = View.VISIBLE
@@ -96,6 +101,9 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.allDeliveredId.visibility = View.VISIBLE
             binding.cashCollectionId.visibility = View.GONE
             binding.linReceivedAmount.visibility = View.GONE
+            binding.linDueAmountId.visibility = View.GONE
+            binding.linReceivableAmount.visibility = View.GONE
+            binding.linReturnAmount.visibility = View.GONE
         }
 
 
@@ -237,6 +245,18 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
 
             adapter.addData(productList as MutableList<Product>)
 
+            for (i in productList){
+                val itemToUpdate = deliveryList.find { it.matnr == i.matnr }
+                itemToUpdate?.apply {
+                    delivery_quantity = i.quantity
+                    delivery_net_val = i.net_val
+                    return_quantity = 0
+                    return_net_val = 0.0
+                }
+            }
+
+
+
         }
 
         binding.allReturnId.setOnClickListener {
@@ -249,6 +269,19 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.recyclerView.setHasFixedSize(true)
 
             adapter.addData(productList as MutableList<Product>)
+
+            for (i in productList){
+                val itemToUpdate = deliveryList.find { it.matnr == i.matnr }
+                itemToUpdate?.apply {
+                    delivery_quantity = 0
+                    delivery_net_val = 0.0
+                    return_quantity = i.quantity
+                    return_net_val = i.net_val
+                }
+            }
+
+
+
 
         }
 
@@ -452,6 +485,15 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             return_quantity = returnQty.toInt()
             return_net_val = returnAmountId.toDouble()
         }
+
+        var sum = 0.0
+
+        for (i in deliveryList){
+            val returnNetVal = i.return_net_val
+            sum+=returnNetVal
+        }
+        binding.returnAmountId.text=sum.toString()
+
     }
 
     private fun roundTheNumber(numInDouble: Double): String {
