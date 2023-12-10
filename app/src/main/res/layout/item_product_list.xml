@@ -106,6 +106,14 @@
                         android:inputType="number"
                         android:layout_marginHorizontal="10dp"
                         />
+
+                    <TextView
+                        android:id="@+id/tvReceivedQty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginHorizontal="10dp"
+                        />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -126,6 +134,13 @@
                             android:inputType="number"
                             android:layout_marginHorizontal="10dp"
                             />
+                    <TextView
+                        android:id="@+id/tvReturnQty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginHorizontal="10dp"
+                        />
                 </LinearLayout>
         </LinearLayout>
 

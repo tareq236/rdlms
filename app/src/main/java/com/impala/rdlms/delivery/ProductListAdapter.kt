@@ -80,7 +80,8 @@ class ProductListAdapter(
                                     s.toString(),
                                     binding.receivedAmountId.text.toString(),
                                     binding.returnQty.text.toString(),
-                                    binding.returnAmountId.text.toString()
+                                    binding.returnAmountId.text.toString(),
+                                            item.id!!
                                 )
                             } else {
                                 binding.returnQty.setText("")
@@ -132,7 +133,8 @@ class ProductListAdapter(
                                     s.toString(),
                                     binding.receivedAmountId.text.toString(),
                                     binding.returnQty.text.toString(),
-                                    binding.returnAmountId.text.toString()
+                                    binding.returnAmountId.text.toString(),
+                                    item.id!!
                                 )
                             } else {
                                 binding.receivedQty.setText("")
@@ -198,7 +200,8 @@ class ProductListAdapter(
                                     s.toString(),
                                     binding.receivedAmountId.text.toString(),
                                     binding.returnQty.text.toString(),
-                                    binding.returnAmountId.text.toString()
+                                    binding.returnAmountId.text.toString(),
+                                    item.id!!
                                 )
                             } else {
                                 binding.returnQty.setText("")
@@ -250,7 +253,8 @@ class ProductListAdapter(
                                     s.toString(),
                                     binding.receivedAmountId.text.toString(),
                                     binding.returnQty.text.toString(),
-                                    binding.returnAmountId.text.toString()
+                                    binding.returnAmountId.text.toString(),
+                                    item.id!!
                                 )
                             } else {
                                 binding.receivedQty.setText("")
@@ -320,7 +324,8 @@ class ProductListAdapter(
                                     s.toString(),
                                     binding.receivedAmountId.text.toString(),
                                     binding.returnQty.text.toString(),
-                                    binding.returnAmountId.text.toString()
+                                    binding.returnAmountId.text.toString(),
+                                    item.id!!
                                 )
                             } else {
                                 binding.returnQty.setText("")
@@ -372,7 +377,8 @@ class ProductListAdapter(
                                     s.toString(),
                                     binding.receivedAmountId.text.toString(),
                                     binding.returnQty.text.toString(),
-                                    binding.returnAmountId.text.toString()
+                                    binding.returnAmountId.text.toString(),
+                                    item.id!!
                                 )
                             } else {
                                 binding.receivedQty.setText("")
@@ -414,10 +420,18 @@ class ProductListAdapter(
             if(sessionManager.deliveryType.toString() == "DeliveryDone"){
                 binding.receivedQty.visibility = View.GONE
                 binding.returnQty.visibility = View.GONE
+                binding.tvReturnQty.visibility = View.VISIBLE
+                binding.tvReceivedQty.visibility = View.VISIBLE
                 binding.receivedAmountId.text=item.delivery_net_val.toString()
                 binding.returnAmountId.text=item.return_net_val.toString()
-            }else{
 
+                binding.tvReceivedQty.text = item.delivery_quantity.toString()
+                binding.tvReturnQty.text = item.return_quantity.toString()
+            }else{
+                binding.tvReturnQty.visibility = View.GONE
+                binding.tvReceivedQty.visibility = View.GONE
+                binding.receivedQty.visibility = View.VISIBLE
+                binding.returnQty.visibility = View.VISIBLE
             }
 
 
@@ -438,7 +452,8 @@ class ProductListAdapter(
             receivedQty: String,
             receiveAmountId: String,
             returnQty: String,
-            returnAmountId: String
+            returnAmountId: String,
+            id:Int
         )
 
     }

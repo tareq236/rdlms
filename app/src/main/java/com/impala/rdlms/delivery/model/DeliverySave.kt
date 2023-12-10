@@ -14,6 +14,10 @@ data class DeliverySave(
     var delivery_status: String,
     var last_status: String,
     var type: String,
+    var cash_collection: Double,
+    var cash_collection_latitude: String?,
+    var cash_collection_longitude: String?,
+    var cash_collection_status: String?,
     var deliverys: List<DeliveryList>
 )
 
@@ -28,4 +32,5 @@ data class DeliveryList(
     var delivery_net_val: Double,
     var return_quantity: Int,
     var return_net_val: Double,
+    var id: Int?
 )

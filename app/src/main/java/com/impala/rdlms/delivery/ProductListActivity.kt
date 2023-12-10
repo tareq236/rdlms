@@ -20,6 +20,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.gson.Gson
 import com.impala.rdlms.R
+import com.impala.rdlms.cash_collection.model.CashCollectionList
+import com.impala.rdlms.cash_collection.model.CashCollectionSave
 import com.impala.rdlms.databinding.ActivityProductListBinding
 import com.impala.rdlms.delivery.model.DeliveryList
 import com.impala.rdlms.delivery.model.DeliverySave
@@ -42,6 +44,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     var invoiceId = ""
     lateinit var transportArr: Array<String>
     lateinit var deliveryList: MutableList<DeliveryList>
+    lateinit var cashCollectionList: MutableList<CashCollectionList>
     private lateinit var loadingDialog: Dialog
     var flag = ""
     private lateinit var sessionManager: SessionManager
@@ -83,6 +86,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     }
 
     private fun initView() {
+        cashCollectionList = mutableListOf()
         //hide layout
         if (flag == "cash") {
             binding.linTransportType.visibility = View.GONE
@@ -112,13 +116,13 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
 
-        if(sessionManager.deliveryType.toString() == "DeliveryDone"){
+        if (sessionManager.deliveryType.toString() == "DeliveryDone") {
             binding.linTransportType.visibility = View.GONE
             binding.llRrButton.visibility = View.GONE
             binding.llCdButton.visibility = View.GONE
             binding.llTransportType.visibility = View.VISIBLE
             binding.transportType.text = deliveryDetailsM.transport_type
-        }else{
+        } else {
             binding.llTransportType.visibility = View.GONE
         }
 
@@ -130,8 +134,24 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
 
         for (i in productList) {
             val deliveryItem =
-                DeliveryList(i.matnr, i.batch, i.quantity, i.tp, i.vat, i.net_val, 0, 0.0, 0, 0.0)
+                DeliveryList(
+                    i.matnr,
+                    i.batch,
+                    i.quantity,
+                    i.tp,
+                    i.vat,
+                    i.net_val,
+                    0,
+                    0.0,
+                    0,
+                    0.0,
+                    i.id
+                )
             deliveryList.add(deliveryItem)
+
+            val cashCollectionItem =
+                CashCollectionList(0, 0.0, i.id)
+            cashCollectionList.add(cashCollectionItem)
         }
 
         transportArr = resources.getStringArray(R.array.transportType)
@@ -162,7 +182,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 if (location != null) {
                     val latitude = location.latitude
                     val longitude = location.longitude
-                    if (validateInput(binding.actvTransportType.text.toString())) {
+                    if (validateInput(binding.receivedAmountId.text.toString())) {
                         val deliveryList = DeliverySave(
                             billing_doc_no = deliveryDetailsM.billing_doc_no,
                             billing_date = deliveryDetailsM.billing_date,
@@ -177,6 +197,10 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                             delivery_status = "Done",
                             last_status = "delivery",
                             type = "delivery",
+                            cash_collection = 0.00,
+                            cash_collection_latitude = null,
+                            cash_collection_longitude = null,
+                            cash_collection_status = null,
                             deliverys = deliveryList
                         )
 
@@ -244,6 +268,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                     showToast("Location data not available.")
                 }
             }
+
         }
 
         binding.allReceivedId.setOnClickListener {
@@ -289,6 +314,17 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                     return_quantity = i.quantity
                     return_net_val = i.net_val
                 }
+
+            }
+            if (sessionManager.deliveryType == "CashRemaining") {
+                for (i in productList) {
+                    val itemToUpdate = cashCollectionList.find { it.id == i.id }
+                    itemToUpdate?.apply {
+                        return_quantity = i.quantity
+                        return_net_val = i.net_val
+                    }
+
+                }
             }
 
             var sum = 0.0
@@ -308,6 +344,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
             }
+
 
         }
 
@@ -331,6 +368,10 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                             delivery_status = "Cancel",
                             last_status = "delivery",
                             type = "delivery",
+                            cash_collection = 0.00,
+                            cash_collection_latitude = null,
+                            cash_collection_longitude = null,
+                            cash_collection_status = null,
                             deliverys = deliveryList
                         )
 
@@ -400,6 +441,88 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             }
         }
 
+        binding.cashCollectionId.setOnClickListener {
+            getCurrentLocation { location ->
+                if (location != null) {
+                     val latitude = location.latitude
+                    val longitude = location.longitude
+                    // if (validateInput(binding.actvTransportType.text.toString())) {
+                    val cashCollectionList = CashCollectionSave(
+                        deliveryDetailsM.billing_doc_no,
+                        last_status = "cash_collection",
+                        type = "cash_collection",
+                        cash_collection = binding.receivedAmountId.text.toString().toDouble(),
+                        cash_collection_latitude = latitude.toString(),
+                        cash_collection_longitude = longitude.toString(),
+                        cash_collection_status = "Done",
+                        deliverys = cashCollectionList
+                    )
+
+                    val apiService = ApiService.CreateApi1()
+                    showLoadingDialog()
+                    // Make the API call
+                    apiService.cashCollection(cashCollectionList, deliveryDetailsM.id!!)
+                        .enqueue(object : Callback<DeliverySaveResponse> {
+                            override fun onResponse(
+                                call: Call<DeliverySaveResponse>,
+                                response: Response<DeliverySaveResponse>
+                            ) {
+                                if (response.isSuccessful) {
+                                    // Handle successful login response
+                                    val response = response.body()
+                                    if (response != null) {
+                                        if (response.success) {
+                                            dismissLoadingDialog()
+                                            showFDialogBox(
+                                                SweetAlertDialog.SUCCESS_TYPE,
+                                                "SUCCESS",
+                                                "Save Successfully  "
+                                            )
+
+                                        } else {
+                                            dismissLoadingDialog()
+                                            showDialogBox(
+                                                SweetAlertDialog.WARNING_TYPE,
+                                                "Waring",
+                                                response.message
+                                            )
+                                        }
+                                    } else {
+                                        dismissLoadingDialog()
+                                        showDialogBox(
+                                            SweetAlertDialog.ERROR_TYPE,
+                                            "Error",
+                                            "Response NULL value. Try later"
+                                        )
+                                    }
+                                } else {
+                                    dismissLoadingDialog()
+                                    showDialogBox(
+                                        SweetAlertDialog.ERROR_TYPE,
+                                        "Error",
+                                        "Response failed. Try later"
+                                    )
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<DeliverySaveResponse>,
+                                t: Throwable
+                            ) {
+                                dismissLoadingDialog()
+                                showDialogBox(
+                                    SweetAlertDialog.ERROR_TYPE,
+                                    "Error",
+                                    "Network error"
+                                )
+                            }
+                        })
+                    //  }
+                } else {
+                    showToast("Location data not available.")
+                }
+            }
+        }
 
 
         binding.receivedAmountId.addTextChangedListener(object : TextWatcher {
@@ -506,8 +629,11 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         receivedQty: String,
         receiveAmountId: String,
         returnQty: String,
-        returnAmountId: String
+        returnAmountId: String,
+        id:Int
     ) {
+
+
         val itemToUpdate = deliveryList.find { it.matnr == matnr }
         itemToUpdate?.apply {
             delivery_quantity = receivedQty.toInt()
@@ -515,7 +641,16 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             return_quantity = returnQty.toInt()
             return_net_val = returnAmountId.toDouble()
         }
+        if (sessionManager.deliveryType == "CashRemaining") {
 
+            val itemToUpdate = cashCollectionList.find { it.id == id }
+            itemToUpdate?.apply {
+                return_quantity = returnQty.toInt()
+                return_net_val = returnAmountId.toDouble()
+            }
+
+
+        }
         var sum = 0.0
 
         for (i in deliveryList) {
@@ -534,6 +669,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         } catch (e: NumberFormatException) {
             e.printStackTrace()
         }
+
 
     }
 
