@@ -24,6 +24,7 @@ import android.graphics.Bitmap
 import android.location.Location
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -31,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.impala.rdlms.MainActivity
 import com.impala.rdlms.attendance.model.AttendanceResponse
 import com.impala.rdlms.utils.ApiService
+import com.impala.rdlms.utils.SessionManager
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format
@@ -56,14 +58,16 @@ class MorningAttendanceActivity : AppCompatActivity() {
     private lateinit var startWorkButton: Button
     private lateinit var imageView: ImageView
     private lateinit var loadingDialog: Dialog
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_morning_attendance)
-
+        sessionManager = SessionManager(this)
         captureImageButton = findViewById(R.id.captureImageButton)
         retakeImageButton = findViewById(R.id.retakeImageButton)
         startWorkButton = findViewById(R.id.startWorkButton)
+        var txvUserName: TextView = findViewById(R.id.user_name)
         imageView = findViewById(R.id.imageView)
 
         // Initialize the loading dialog
@@ -76,12 +80,10 @@ class MorningAttendanceActivity : AppCompatActivity() {
         // Enable the Up button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        txvUserName.text = sessionManager.fullName+" ("+sessionManager.userId+")"
+
         // Check and request camera permission
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.CAMERA),

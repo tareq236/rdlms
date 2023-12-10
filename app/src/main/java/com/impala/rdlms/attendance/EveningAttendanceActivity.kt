@@ -23,6 +23,7 @@ import android.graphics.Bitmap
 import android.location.Location
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -65,6 +66,7 @@ class EveningAttendanceActivity : AppCompatActivity() {
         retakeImageButton = findViewById(R.id.retakeImageButton)
         startWorkButton = findViewById(R.id.startWorkButton)
         imageView = findViewById(R.id.imageView)
+        var txvUserName: TextView = findViewById(R.id.user_name)
 
         // Initialize the loading dialog
         loadingDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
@@ -75,6 +77,8 @@ class EveningAttendanceActivity : AppCompatActivity() {
 
         // Enable the Up button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        txvUserName.text = sessionManager.fullName+" ("+sessionManager.userId+")"
 
         // Check and request camera permission
         if (ContextCompat.checkSelfPermission(
