@@ -27,6 +27,7 @@ import com.impala.rdlms.delivery.model.DeliverySaveResponse
 import com.impala.rdlms.delivery.model.Invoice
 import com.impala.rdlms.delivery.model.Product
 import com.impala.rdlms.utils.ApiService
+import com.impala.rdlms.utils.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,6 +44,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     lateinit var deliveryList: MutableList<DeliveryList>
     private lateinit var loadingDialog: Dialog
     var flag = ""
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +53,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
-
+        sessionManager = SessionManager(this)
         flag = this.intent.getStringExtra("flag")!!
         // Initialize the loading dialog
         loadingDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
@@ -109,6 +111,17 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         invoiceId = this.intent.getStringExtra("invoice_id")!!
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
+
+        if(sessionManager.deliveryType.toString() == "DeliveryDone"){
+            binding.linTransportType.visibility = View.GONE
+            binding.llRrButton.visibility = View.GONE
+            binding.llCdButton.visibility = View.GONE
+            binding.llTransportType.visibility = View.VISIBLE
+            binding.transportType.text = deliveryDetailsM.transport_type
+        }else{
+            binding.llTransportType.visibility = View.GONE
+        }
+
         val totalAmount = this.intent.getStringExtra("total_amount")
         binding.totalAmountId.text = totalAmount
 
@@ -122,7 +135,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         transportArr = resources.getStringArray(R.array.transportType)
-        adapter = ProductListAdapter("regular", this, flag)
+        adapter = ProductListAdapter("regular", this, flag, sessionManager)
         val linearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
@@ -234,7 +247,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         binding.allReceivedId.setOnClickListener {
-            val adapter = ProductListAdapter("all_received", this, flag)
+            val adapter = ProductListAdapter("all_received", this, flag, sessionManager)
 
             val linearLayoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -258,7 +271,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         binding.allReturnId.setOnClickListener {
-            val adapter = ProductListAdapter("all_return", this, flag)
+            val adapter = ProductListAdapter("all_return", this, flag, sessionManager)
 
             val linearLayoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

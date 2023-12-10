@@ -66,7 +66,7 @@ class DeliveryAdapter(val context: Context, val flag: String) :
             binding.mcvItem.setOnClickListener {
                 val gson = Gson()
                 val jsonStringItem = gson.toJson(item)
-                val intent = Intent(itemView.context, DeliveryReportActivity::class.java)
+                val intent = Intent(itemView.context, DeliveryDetailsActivity::class.java)
                     .putExtra("delivery_details", jsonStringItem)
                     .putExtra("total_amount", binding.txvAmount.text.toString())
                     .putExtra("flag", flag)

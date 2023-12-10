@@ -47,7 +47,11 @@ class CashCollectionActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
 
-        cashCollectionType = sessionManager.deliveryType.toString()
+        if(sessionManager.deliveryType.toString() == "CashRemaining"){
+            cashCollectionType = "Remaining"
+        }else if(sessionManager.deliveryType.toString() == "CashDone"){
+            cashCollectionType = "Done"
+        }
 
         getDeliveryRemainingList()
 

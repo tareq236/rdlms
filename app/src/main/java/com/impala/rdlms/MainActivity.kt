@@ -109,22 +109,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         mcvDeliveryRemaining.setOnClickListener {
-            sessionManager.deliveryType = "Remaining"
+            sessionManager.deliveryType = "DeliveryRemaining"
             val intent = Intent(this@MainActivity, DeliveryRemainingActivity::class.java)
             startActivity(intent)
         }
         mcvDeliveryDone.setOnClickListener {
-            sessionManager.deliveryType = "Done"
+            sessionManager.deliveryType = "DeliveryDone"
             val intent = Intent(this@MainActivity, DeliveryRemainingActivity::class.java)
             startActivity(intent)
         }
         mcvCashCollectionRemaining.setOnClickListener {
-            sessionManager.deliveryType = "Remaining"
+            sessionManager.deliveryType = "CashRemaining"
             val intent = Intent(this@MainActivity, CashCollectionActivity::class.java)
             startActivity(intent)
         }
         mcvCashCollectionDone.setOnClickListener {
-            sessionManager.deliveryType = "Done"
+            sessionManager.deliveryType = "CashDone"
             val intent = Intent(this@MainActivity, CashCollectionActivity::class.java)
             startActivity(intent)
         }

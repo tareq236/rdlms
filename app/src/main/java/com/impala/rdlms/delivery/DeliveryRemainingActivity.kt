@@ -44,8 +44,11 @@ class DeliveryRemainingActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
 
-        deliveryType = sessionManager.deliveryType.toString()
-
+        if(sessionManager.deliveryType.toString() == "DeliveryRemaining"){
+            deliveryType = "Remaining"
+        }else if(sessionManager.deliveryType.toString() == "DeliveryDone"){
+            deliveryType = "Done"
+        }
 
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {

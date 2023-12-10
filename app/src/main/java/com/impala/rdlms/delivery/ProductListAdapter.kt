@@ -14,11 +14,13 @@ import com.impala.rdlms.databinding.ItemProductListBinding
 import com.impala.rdlms.db.ProductModel
 import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.delivery.model.Product
+import com.impala.rdlms.utils.SessionManager
 
 class ProductListAdapter(
     private val flag: String,
     val clickManage: IAddDeliveryItem,
-    val flag1: String
+    val flag1: String,
+    var sessionManager: SessionManager
 ) :
     RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
     var list: MutableList<Product> = mutableListOf()
@@ -405,6 +407,16 @@ class ProductListAdapter(
                     }
                 })
 
+
+            }
+
+
+            if(sessionManager.deliveryType.toString() == "DeliveryDone"){
+                binding.receivedQty.visibility = View.GONE
+                binding.returnQty.visibility = View.GONE
+                binding.receivedAmountId.text=item.delivery_net_val.toString()
+                binding.returnAmountId.text=item.return_net_val.toString()
+            }else{
 
             }
 
