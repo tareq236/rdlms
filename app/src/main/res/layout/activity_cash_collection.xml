@@ -35,14 +35,14 @@
             android:gravity="center"
             android:background="@drawable/rounded_corner_line">
 
-            <TextView
-                android:id="@+id/txv_search_customer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
                 android:layout_marginHorizontal="30dp"
-                android:text="Search Customer" />
+                android:layout_centerVertical="true"
+                android:hint="Search Customer" />
 
 
         </LinearLayout>

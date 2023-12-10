@@ -13,9 +13,15 @@ import com.impala.rdlms.delivery.model.DeliveryData
 import com.impala.rdlms.databinding.ItemDeliveryBinding
 import java.text.DecimalFormat
 
-class DeliveryAdapter(val context: Context,val flag:String) : RecyclerView.Adapter<DeliveryAdapter.ViewHolder>() {
+class DeliveryAdapter(val context: Context, val flag: String) :
+    RecyclerView.Adapter<DeliveryAdapter.ViewHolder>() {
 
     var list: MutableList<DeliveryData> = mutableListOf()
+
+    fun filterList(filteredList: ArrayList<DeliveryData>) {
+        this.list = filteredList;
+        notifyDataSetChanged();
+    }
 
     fun addData(allCus: MutableList<DeliveryData>) {
         list.addAll(allCus)
@@ -60,10 +66,10 @@ class DeliveryAdapter(val context: Context,val flag:String) : RecyclerView.Adapt
             binding.mcvItem.setOnClickListener {
                 val gson = Gson()
                 val jsonStringItem = gson.toJson(item)
-                val intent = Intent(itemView.context, DeliveryDetailsActivity::class.java)
-                    .putExtra("delivery_details",jsonStringItem)
-                    .putExtra("total_amount",binding.txvAmount.text.toString())
-                    .putExtra("flag",flag)
+                val intent = Intent(itemView.context, DeliveryReportActivity::class.java)
+                    .putExtra("delivery_details", jsonStringItem)
+                    .putExtra("total_amount", binding.txvAmount.text.toString())
+                    .putExtra("flag", flag)
                 itemView.context.startActivity(intent)
             }
         }

@@ -8,7 +8,6 @@ import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -293,7 +292,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 val iReturnAmount = returnAmount.toDouble()
                 val result = iTotalAmount - iReturnAmount
                 binding.receivableAmountId.text = roundTheNumber(result)
-            }catch (e:NumberFormatException){
+            } catch (e: NumberFormatException) {
                 e.printStackTrace()
             }
 
@@ -448,8 +447,12 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             .setConfirmClickListener {
                 it.dismissWithAnimation()
                 callback?.invoke()
-                val intent = Intent(this@ProductListActivity, DeliveryRemainingActivity::class.java)
-                startActivity(intent)
+                val i = Intent(this, DeliveryRemainingActivity::class.java)
+                // set the new task and clear flags
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(i)
+//                val intent = Intent(this@ProductListActivity, DeliveryRemainingActivity::class.java)
+//                startActivity(intent)
             }
         sweetAlertDialog.show()
     }
@@ -515,7 +518,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             val iReturnAmount = returnAmount.toDouble()
             val result = iTotalAmount - iReturnAmount
             binding.receivableAmountId.text = roundTheNumber(result)
-        }catch (e:NumberFormatException){
+        } catch (e: NumberFormatException) {
             e.printStackTrace()
         }
 
