@@ -83,7 +83,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
 
     private fun initView() {
         //hide layout
-        if(flag=="cash"){
+        if (flag == "cash") {
             binding.linTransportType.visibility = View.GONE
             binding.allReceivedId.visibility = View.GONE
             binding.cancelId.visibility = View.GONE
@@ -94,7 +94,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.linReceivableAmount.visibility = View.VISIBLE
             binding.linReturnAmount.visibility = View.VISIBLE
 
-        }else{
+        } else {
             binding.linTransportType.visibility = View.VISIBLE
             binding.allReceivedId.visibility = View.VISIBLE
             binding.cancelId.visibility = View.VISIBLE
@@ -123,7 +123,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         transportArr = resources.getStringArray(R.array.transportType)
-        adapter = ProductListAdapter("regular", this,flag)
+        adapter = ProductListAdapter("regular", this, flag)
         val linearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
@@ -235,7 +235,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         }
 
         binding.allReceivedId.setOnClickListener {
-            val adapter = ProductListAdapter("all_received", this,flag)
+            val adapter = ProductListAdapter("all_received", this, flag)
 
             val linearLayoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -245,7 +245,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
 
             adapter.addData(productList as MutableList<Product>)
 
-            for (i in productList){
+            for (i in productList) {
                 val itemToUpdate = deliveryList.find { it.matnr == i.matnr }
                 itemToUpdate?.apply {
                     delivery_quantity = i.quantity
@@ -256,11 +256,10 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             }
 
 
-
         }
 
         binding.allReturnId.setOnClickListener {
-            val adapter = ProductListAdapter("all_return", this,flag)
+            val adapter = ProductListAdapter("all_return", this, flag)
 
             val linearLayoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -270,7 +269,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
 
             adapter.addData(productList as MutableList<Product>)
 
-            for (i in productList){
+            for (i in productList) {
                 val itemToUpdate = deliveryList.find { it.matnr == i.matnr }
                 itemToUpdate?.apply {
                     delivery_quantity = 0
@@ -280,8 +279,23 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 }
             }
 
+            var sum = 0.0
+            for (i in deliveryList) {
+                val returnNetAmount = i.return_net_val
+                sum += returnNetAmount
+            }
+            binding.returnAmountId.text = sum.toString()
 
-
+            try {
+                val totalAmount = binding.totalAmountId.text.toString()
+                val returnAmount = binding.returnAmountId.text.toString()
+                val iTotalAmount = totalAmount.toDouble()
+                val iReturnAmount = returnAmount.toDouble()
+                val result = iTotalAmount - iReturnAmount
+                binding.receivableAmountId.text = roundTheNumber(result)
+            }catch (e:NumberFormatException){
+                e.printStackTrace()
+            }
 
         }
 
@@ -392,8 +406,8 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                         val totalAmount = binding.totalAmountId.text.toString()
                         val iTotalAmount = totalAmount.toDouble()
                         val receivedAmount = iTotalAmount - s.toString().toDouble()
-                        binding.dueAmountId.text=roundTheNumber(receivedAmount)
-                    }catch (e:NumberFormatException){
+                        binding.dueAmountId.text = roundTheNumber(receivedAmount)
+                    } catch (e: NumberFormatException) {
                         e.printStackTrace()
                     }
 
@@ -488,11 +502,22 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
 
         var sum = 0.0
 
-        for (i in deliveryList){
+        for (i in deliveryList) {
             val returnNetVal = i.return_net_val
-            sum+=returnNetVal
+            sum += returnNetVal
         }
-        binding.returnAmountId.text=sum.toString()
+        binding.returnAmountId.text = sum.toString()
+
+        try {
+            val totalAmount = binding.totalAmountId.text.toString()
+            val returnAmount = binding.returnAmountId.text.toString()
+            val iTotalAmount = totalAmount.toDouble()
+            val iReturnAmount = returnAmount.toDouble()
+            val result = iTotalAmount - iReturnAmount
+            binding.receivableAmountId.text = roundTheNumber(result)
+        }catch (e:NumberFormatException){
+            e.printStackTrace()
+        }
 
     }
 
