@@ -61,6 +61,13 @@ class DeliveryDetailsActivity : AppCompatActivity() {
             binding.vehicleNo.text= deliveryDetailsM.invoice_list[0].vehicle_no
 
             binding.toolbar.title = "Delivery Done Details "
+        }else if(sessionManager.deliveryType.toString() == "CashDone"){
+            binding.llImageMap.visibility= View.GONE
+            binding.gatePass.text= deliveryDetailsM.invoice_list[0].gate_pass_no
+            binding.transportType.text= deliveryDetailsM.invoice_list[0].transport_type
+            binding.vehicleNo.text= deliveryDetailsM.invoice_list[0].vehicle_no
+
+            binding.toolbar.title = "Cash Collection Done Details "
         }else{
             binding.toolbar.title = "Delivery Details"
             binding.llImageMap.visibility= View.VISIBLE

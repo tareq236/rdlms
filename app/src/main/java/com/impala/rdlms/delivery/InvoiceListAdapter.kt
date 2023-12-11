@@ -67,7 +67,7 @@ class InvoiceListAdapter(val context: Context,val flag:String) :
                 }
                 binding.llDeliveryReport.visibility = View.VISIBLE
                 binding.txvDeliveredQty.text = dvTotalQty.toString()
-                binding.txvDeliveredAmount.text = dvTotalNetVal.toString()
+                binding.txvDeliveredAmount.text = roundTheNumber(dvTotalNetVal)
             }
 
             binding.mcvItem.setOnClickListener {

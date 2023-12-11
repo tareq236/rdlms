@@ -427,7 +427,17 @@ class ProductListAdapter(
 
                 binding.tvReceivedQty.text = item.delivery_quantity.toString()
                 binding.tvReturnQty.text = item.return_quantity.toString()
-            }else{
+            }else if(sessionManager.deliveryType.toString() == "CashDone"){
+                binding.receivedQty.visibility = View.GONE
+                binding.returnQty.visibility = View.GONE
+                binding.tvReturnQty.visibility = View.VISIBLE
+                binding.tvReceivedQty.visibility = View.VISIBLE
+                binding.receivedAmountId.text=item.delivery_net_val.toString()
+                binding.returnAmountId.text=item.return_net_val.toString()
+
+                binding.tvReceivedQty.text = item.delivery_quantity.toString()
+                binding.tvReturnQty.text = item.return_quantity.toString()
+            }else {
                 binding.tvReturnQty.visibility = View.GONE
                 binding.tvReceivedQty.visibility = View.GONE
                 binding.receivedQty.visibility = View.VISIBLE

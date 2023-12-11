@@ -49,8 +49,10 @@ class CashCollectionActivity : AppCompatActivity() {
 
         if(sessionManager.deliveryType.toString() == "CashRemaining"){
             cashCollectionType = "Remaining"
+            binding.toolbar.title = "Cash Collection Remaining"
         }else if(sessionManager.deliveryType.toString() == "CashDone"){
             cashCollectionType = "Done"
+            binding.toolbar.title = "Cash Collection Done"
         }
 
         getDeliveryRemainingList()

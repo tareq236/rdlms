@@ -122,7 +122,19 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.llCdButton.visibility = View.GONE
             binding.llTransportType.visibility = View.VISIBLE
             binding.transportType.text = deliveryDetailsM.transport_type
-        } else {
+        } else if(sessionManager.deliveryType.toString() == "CashDone"){
+            binding.linTransportType.visibility = View.GONE
+            binding.llRrButton.visibility = View.GONE
+            binding.llCdButton.visibility = View.GONE
+            binding.llTransportType.visibility = View.VISIBLE
+            binding.transportType.text = deliveryDetailsM.transport_type
+
+            binding.linReceivedAmount.visibility = View.GONE
+            binding.linReturnAmount.visibility = View.GONE
+            binding.linDueAmountId.visibility = View.GONE
+            binding.linReceivableAmount.visibility = View.GONE
+        }else{
+
             binding.llTransportType.visibility = View.GONE
         }
 
@@ -332,7 +344,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 val returnNetAmount = i.return_net_val
                 sum += returnNetAmount
             }
-            binding.returnAmountId.text = sum.toString()
+            binding.returnAmountId.text = roundTheNumber(sum)
 
             try {
                 val totalAmount = binding.totalAmountId.text.toString()
@@ -446,7 +458,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 if (location != null) {
                      val latitude = location.latitude
                     val longitude = location.longitude
-                    // if (validateInput(binding.actvTransportType.text.toString())) {
+                     if (validateCashCollectionInput(binding.receivedAmountId.text.toString())) {
                     val cashCollectionList = CashCollectionSave(
                         deliveryDetailsM.billing_doc_no,
                         last_status = "cash_collection",
@@ -517,7 +529,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                                 )
                             }
                         })
-                    //  }
+                      }
                 } else {
                     showToast("Location data not available.")
                 }
@@ -570,7 +582,14 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
 
         return true
     }
+    private fun validateCashCollectionInput(receiveAmount: String): Boolean {
+        if (receiveAmount.isEmpty()) {
+            showDialogBox(SweetAlertDialog.WARNING_TYPE, "Validation", "Receive Amount is required")
+            return false
+        }
 
+        return true
+    }
     private fun showFDialogBox(
         type: Int,
         title: String,
@@ -657,7 +676,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             val returnNetVal = i.return_net_val
             sum += returnNetVal
         }
-        binding.returnAmountId.text = sum.toString()
+        binding.returnAmountId.text = roundTheNumber(sum)
 
         try {
             val totalAmount = binding.totalAmountId.text.toString()
