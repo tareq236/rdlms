@@ -1,7 +1,8 @@
 package com.impala.rdlms.utils
 
-import com.google.gson.JsonObject
 import com.impala.rdlms.attendance.model.AttendanceResponse
+import com.impala.rdlms.auth.models.RegistrationRequest
+import com.impala.rdlms.auth.models.RegistrationResponse
 import com.impala.rdlms.cash_collection.model.CashCollectionSave
 import com.impala.rdlms.delivery.model.DeliveryResponse
 import com.impala.rdlms.delivery.model.DeliverySave
@@ -15,10 +16,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -79,7 +77,8 @@ interface ApiService {
     @POST("api/v1/user_login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
-
+    @POST("api/v1/user_registration")
+    fun userRegistration(@Body request: RegistrationRequest): Call<RegistrationResponse>
 
 
     companion object {

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import com.impala.rdlms.utils.ApiService
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
+    private lateinit var registerId: TextView
     private lateinit var loadingDialog: Dialog
     lateinit var sessionManager: SessionManager
 
@@ -35,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
         usernameEditText = findViewById(R.id.usernameEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         loginButton = findViewById(R.id.loginButton)
+        registerId = findViewById(R.id.btnRegister)
         sessionManager = SessionManager(this)
 
         // Initialize the loading dialog
@@ -49,6 +52,9 @@ class LoginActivity : AppCompatActivity() {
                 // Call the login function here
                 performLogin(username, password)
             }
+        }
+        registerId.setOnClickListener {
+             startActivity(Intent(this,RegistrationActivity::class.java))
         }
     }
 
@@ -126,6 +132,7 @@ class LoginActivity : AppCompatActivity() {
         sessionManager.userId = result.result.sap_id
         sessionManager.fullName = result.result.full_name
         sessionManager.mobileNumber = result.result.mobile_number
+        sessionManager.userType = result.result.user_type
     }
 
     private fun showDialogBox(type: Int, title: String, message: String, callback: (() -> Unit)? = null) {

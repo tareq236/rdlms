@@ -57,4 +57,7 @@ dependencies {
     implementation("id.zelory:compressor:3.0.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
+    //mobile number validation
+    implementation ("com.googlecode.libphonenumber:libphonenumber:8.12.28")
+
 }

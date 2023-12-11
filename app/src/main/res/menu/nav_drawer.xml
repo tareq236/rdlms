@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_menu_profile"
+            android:title="Profile"
+            android:icon="@drawable/user_solid" />
+        <item
             android:id="@+id/nav_menu_notification"
             android:title="Notification"
             android:icon="@drawable/baseline_notifications_24" />

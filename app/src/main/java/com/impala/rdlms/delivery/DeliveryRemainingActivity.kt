@@ -46,8 +46,10 @@ class DeliveryRemainingActivity : AppCompatActivity() {
 
         if(sessionManager.deliveryType.toString() == "DeliveryRemaining"){
             deliveryType = "Remaining"
+            binding.toolbar.title = "Delivery Remaining"
         }else if(sessionManager.deliveryType.toString() == "DeliveryDone"){
             deliveryType = "Done"
+            binding.toolbar.title = "Delivery Done"
         }
 
 
@@ -84,6 +86,7 @@ class DeliveryRemainingActivity : AppCompatActivity() {
                         if (response != null) {
                             if (response.success) {
                                 dataList = response.result as MutableList<DeliveryData>
+                                adapter.clearData()
                                 adapter.addData(dataList as MutableList<DeliveryData>)
                                 dismissLoadingDialog()
                             } else {

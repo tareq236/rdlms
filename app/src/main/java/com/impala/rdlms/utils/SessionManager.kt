@@ -17,7 +17,9 @@ class SessionManager(context: Context) {
     var mobileNumber: String?
         get() = sharedPreferences.getString("mobile_number", "")
         set(mobileNumber) = sharedPreferences.edit().putString("mobile_number", mobileNumber!!).apply()
-
+    var userType: String?
+        get() = sharedPreferences.getString("user_type", "")
+        set(userType) = sharedPreferences.edit().putString("user_type", userType!!).apply()
     var isStartWork: Boolean?
         get() = sharedPreferences.getBoolean("is_start_work", false)
         set(isStartWork) = sharedPreferences.edit().putBoolean("is_start_work", isStartWork!!).apply()

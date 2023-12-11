@@ -19,6 +19,7 @@ import android.os.Handler
 import android.os.Looper
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.material.card.MaterialCardView
+import com.impala.rdlms.auth.EditProfileActivity
 import com.impala.rdlms.cash_collection.CashCollectionActivity
 import com.impala.rdlms.delivery.DeliveryRemainingActivity
 import com.impala.rdlms.models.DashboardResponse
@@ -81,6 +82,10 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.nav_menu_profile -> {
+                    startActivity(Intent(this,EditProfileActivity::class.java))
+                    true
+                }
                 R.id.nav_menu_notification -> {
                     // Handle Notification item click
                     // Add your code here
@@ -129,9 +134,22 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+//        val apiService = ApiService.CreateApi1()
+//        val userId = sessionManager.userId
+
+
+    }
+
+    private fun getDashboardDetails(){
+
+        val txvDeliveryRemaining: TextView = findViewById(R.id.txv_delivery_remaining)
+        val txvDeliveryDone: TextView = findViewById(R.id.txv_delivery_done)
+        val txvCashCollectionRemaining: TextView = findViewById(R.id.txv_cash_collection_remaining)
+        val txvCashCollectionDone: TextView = findViewById(R.id.txv_cash_collection_done)
+
+
         val apiService = ApiService.CreateApi1()
         val userId = sessionManager.userId
-        showLoadingDialog()
         apiService.getDashboardDetails(userId.toString()).enqueue(object : Callback<DashboardResponse> {
             override fun onResponse(call: Call<DashboardResponse>, response: Response<DashboardResponse>) {
                 if (response.isSuccessful) {
@@ -164,7 +182,6 @@ class MainActivity : AppCompatActivity() {
                 showDialogBox(SweetAlertDialog.ERROR_TYPE, "Error", "Network error")
             }
         })
-
     }
 
     private fun updateDateTime() {
@@ -187,6 +204,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         // Start updating time and date when the activity is resumed
         handler.post(updateTimeRunnable)
+        showLoadingDialog()
+        getDashboardDetails()
     }
 
     override fun onPause() {

@@ -59,11 +59,15 @@ class DeliveryDetailsActivity : AppCompatActivity() {
             binding.gatePass.text= deliveryDetailsM.invoice_list[0].gate_pass_no
             binding.transportType.text= deliveryDetailsM.invoice_list[0].transport_type
             binding.vehicleNo.text= deliveryDetailsM.invoice_list[0].vehicle_no
+
+            binding.toolbar.title = "Delivery Done Details "
         }else{
+            binding.toolbar.title = "Delivery Details"
             binding.llImageMap.visibility= View.VISIBLE
             binding.llGatePass.visibility= View.GONE
             binding.llTransportType.visibility= View.GONE
             binding.llVehicleNo.visibility= View.GONE
+
         }
 
         adapter.addData(invoiceList as MutableList<Invoice>)

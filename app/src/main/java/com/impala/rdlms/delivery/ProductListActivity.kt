@@ -182,7 +182,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 if (location != null) {
                     val latitude = location.latitude
                     val longitude = location.longitude
-                    if (validateInput(binding.receivedAmountId.text.toString())) {
+                    if (validateInput(binding.actvTransportType.text.toString())) {
                         val deliveryList = DeliverySave(
                             billing_doc_no = deliveryDetailsM.billing_doc_no,
                             billing_date = deliveryDetailsM.billing_date,
