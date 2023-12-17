@@ -26,30 +26,19 @@ import retrofit2.http.Query
 
 interface ApiService {
     @PUT("api/v1/cash_collection/save/{id}")
-    fun cashCollection(
-        @Body request: CashCollectionSave,
-        @Path("id") id:Int
-    ): Call<DeliverySaveResponse>
+    fun cashCollection(@Body request: CashCollectionSave, @Path("id") id:Int): Call<DeliverySaveResponse>
 
     @GET("api/v1/cash_collection/v2/list/{sap_id}")
-    fun getCashCollectionRemainingList(
-        @Path("sap_id") userId: String,
-        @Query("type") type: String,
-    ): Call<DeliveryResponse>
+    fun getCashCollectionRemainingList(@Path("sap_id") userId: String, @Query("type") type: String, ): Call<DeliveryResponse>
 
     @POST("api/v1/delivery/save")
     fun saveDeliveryData(@Body request: DeliverySave): Call<DeliverySaveResponse>
 
     @GET("api/v1/delivery/v2/list/{sap_id}")
-    fun getDeliveryRemainingList(
-        @Path("sap_id") userId: String,
-        @Query("type") type: String,
-    ): Call<DeliveryResponse>
+    fun getDeliveryRemainingList(@Path("sap_id") userId: String, @Query("type") type: String, ): Call<DeliveryResponse>
 
     @GET("api/v1/reports/dashboard/{sap_id}")
-    fun getDashboardDetails(
-        @Path("sap_id") userId: String,
-    ): Call<DashboardResponse>
+    fun getDashboardDetails(@Path("sap_id") userId: String, ): Call<DashboardResponse>
 
     @Multipart
     @POST("api/save_end_attendance_sr_with_image")
@@ -70,9 +59,7 @@ interface ApiService {
     ): Call<AttendanceResponse>
 
     @GET("api/v1/user_details")
-    fun getUserDetails(
-        @Query("sap_id") userId: String,
-    ): Call<LoginResponse>
+    fun getUserDetails(@Query("sap_id") userId: String): Call<LoginResponse>
 
     @POST("api/v1/user_login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
@@ -80,20 +67,17 @@ interface ApiService {
     @POST("api/v1/user_registration")
     fun userRegistration(@Body request: RegistrationRequest): Call<RegistrationResponse>
 
-
     companion object {
         // Python Django This function creates an instance of ApiService
         fun CreateApi1(): ApiService {
             // Set up Retrofit and return an instance of ApiService
             val retrofit = Retrofit.Builder()
                 .baseUrl("http://116.68.200.97:6042")
-//                .baseUrl("http://172.16.16.88:6042")
-//                .baseUrl("http://192.168.0.112:6042")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-
             return retrofit.create(ApiService::class.java)
         }
     }
+
 }
 

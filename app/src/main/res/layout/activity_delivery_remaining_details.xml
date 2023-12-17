@@ -242,7 +242,7 @@
                             android:paddingBottom="5dp"
                             android:background="@color/txv_val_bg"
                             android:textSize="13sp"
-                            android:text="Md.Uzzal Hossain" />
+                            android:text="" />
 
                     </LinearLayout>
                     <LinearLayout

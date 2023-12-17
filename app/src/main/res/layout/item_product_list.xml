@@ -85,6 +85,7 @@
        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+           android:layout_marginTop="5dp"
             android:orientation="horizontal">
                 <LinearLayout
                     android:id="@+id/linReceivedQty"
@@ -100,11 +101,13 @@
                         android:textColor="@color/green_text_color"/>
                     <EditText
                         android:id="@+id/receivedQty"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="65dp"
+                        android:layout_height="35dp"
+                        android:padding="5dp"
                         android:text=""
                         android:inputType="number"
                         android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/rounded_gray_border"
                         />
 
                     <TextView
@@ -115,6 +118,7 @@
                         android:layout_marginHorizontal="10dp"
                         />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -128,11 +132,13 @@
                             android:textStyle="bold"/>
                         <EditText
                             android:id="@+id/returnQty"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="65dp"
+                            android:layout_height="35dp"
                             android:text=""
+                            android:padding="5dp"
                             android:inputType="number"
                             android:layout_marginHorizontal="10dp"
+                            android:background="@drawable/rounded_gray_border"
                             />
                     <TextView
                         android:id="@+id/tvReturnQty"
@@ -142,6 +148,7 @@
                         android:layout_marginHorizontal="10dp"
                         />
                 </LinearLayout>
+
         </LinearLayout>
 
        <LinearLayout

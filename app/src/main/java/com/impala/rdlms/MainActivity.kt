@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         val mcvDeliveryDone: MaterialCardView = findViewById(R.id.mcv_delivery_done)
         val mcvCashCollectionRemaining: MaterialCardView = findViewById(R.id.mcv_cash_collection_remaining)
         val mcvCashCollectionDone: MaterialCardView = findViewById(R.id.mcv_cash_collection_done)
+        val mcvReturnDone: MaterialCardView = findViewById(R.id.mcv_return_done)
 
         txvTime = findViewById(R.id.txv_time)
         txvDate = findViewById(R.id.txv_date)
@@ -133,6 +134,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, CashCollectionActivity::class.java)
             startActivity(intent)
         }
+        mcvReturnDone.setOnClickListener {
+            sessionManager.deliveryType = "ReturnDone"
+            val intent = Intent(this@MainActivity, CashCollectionActivity::class.java)
+            startActivity(intent)
+        }
+
 
 //        val apiService = ApiService.CreateApi1()
 //        val userId = sessionManager.userId

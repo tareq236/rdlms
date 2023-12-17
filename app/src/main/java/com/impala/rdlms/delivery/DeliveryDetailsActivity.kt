@@ -45,6 +45,7 @@ class DeliveryDetailsActivity : AppCompatActivity() {
         val custName = deliveryDetailsM.customer_name
         val custAddress = deliveryDetailsM.customer_address
         val custMobile = deliveryDetailsM.customer_mobile
+        val gatePassNo = deliveryDetailsM.gate_pass_no
 
         binding.dateId.text = date
         binding.routeNameId.text = routeName
@@ -53,6 +54,7 @@ class DeliveryDetailsActivity : AppCompatActivity() {
         binding.customerAddressId.text = custAddress
         binding.customerMobileId.text = custMobile
         binding.totalAmountId.text = totalInvoice
+        binding.gatePass.text = gatePassNo
 
         if(sessionManager.deliveryType.toString() == "DeliveryDone"){
             binding.llImageMap.visibility= View.GONE
@@ -71,7 +73,6 @@ class DeliveryDetailsActivity : AppCompatActivity() {
         }else{
             binding.toolbar.title = "Delivery Details"
             binding.llImageMap.visibility= View.VISIBLE
-            binding.llGatePass.visibility= View.GONE
             binding.llTransportType.visibility= View.GONE
             binding.llVehicleNo.visibility= View.GONE
 

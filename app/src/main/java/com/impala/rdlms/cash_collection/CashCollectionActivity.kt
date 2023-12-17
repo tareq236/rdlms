@@ -53,6 +53,9 @@ class CashCollectionActivity : AppCompatActivity() {
         }else if(sessionManager.deliveryType.toString() == "CashDone"){
             cashCollectionType = "Done"
             binding.toolbar.title = "Cash Collection Done"
+        }else if(sessionManager.deliveryType.toString() == "ReturnDone"){
+            cashCollectionType = "Return"
+            binding.toolbar.title = "Returned"
         }
 
         getDeliveryRemainingList()
@@ -60,7 +63,6 @@ class CashCollectionActivity : AppCompatActivity() {
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
                 if (s.toString().isNotEmpty()) {
                     filter(s.toString())
                 } else {
@@ -71,7 +73,6 @@ class CashCollectionActivity : AppCompatActivity() {
                 }
 
             }
-
             override fun afterTextChanged(s: Editable) {}
         })
     }
@@ -79,10 +80,7 @@ class CashCollectionActivity : AppCompatActivity() {
     private fun getDeliveryRemainingList() {
         showLoadingDialog()
         val apiService = ApiService.CreateApi1()
-        apiService.getCashCollectionRemainingList(
-            sessionManager.userId.toString(),
-            cashCollectionType
-        ).enqueue(object :
+        apiService.getCashCollectionRemainingList(sessionManager.userId.toString(), cashCollectionType).enqueue(object :
             Callback<DeliveryResponse> {
             override fun onResponse(
                 call: Call<DeliveryResponse>,

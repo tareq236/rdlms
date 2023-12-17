@@ -48,6 +48,8 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     private lateinit var loadingDialog: Dialog
     var flag = ""
     private lateinit var sessionManager: SessionManager
+    var returnAmount: Double = 0.00
+    var receivableAmount: Double = 0.00
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +100,6 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.linDueAmountId.visibility = View.VISIBLE
             binding.linReceivableAmount.visibility = View.VISIBLE
             binding.linReturnAmount.visibility = View.VISIBLE
-
         } else {
             binding.linTransportType.visibility = View.VISIBLE
             binding.allReceivedId.visibility = View.VISIBLE
@@ -111,7 +112,6 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.linReturnAmount.visibility = View.GONE
         }
 
-
         invoiceId = this.intent.getStringExtra("invoice_id")!!
         val deliveryDetailsString = this.intent.getStringExtra("product_list")
         val deliveryDetailsM = Gson().fromJson(deliveryDetailsString, Invoice::class.java)
@@ -122,7 +122,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             binding.llCdButton.visibility = View.GONE
             binding.llTransportType.visibility = View.VISIBLE
             binding.transportType.text = deliveryDetailsM.transport_type
-        } else if(sessionManager.deliveryType.toString() == "CashDone"){
+        } else if(sessionManager.deliveryType.toString() == "CashDone" || sessionManager.deliveryType.toString() == "ReturnDone"){
             binding.linTransportType.visibility = View.GONE
             binding.llRrButton.visibility = View.GONE
             binding.llCdButton.visibility = View.GONE
@@ -144,32 +144,50 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         deliveryList = mutableListOf()
         val productList = deliveryDetailsM.product_list
 
+        val cashReceivedArrays: ArrayList<IntArray> = ArrayList()
         for (i in productList) {
-            val deliveryItem =
-                DeliveryList(
-                    i.matnr,
-                    i.batch,
-                    i.quantity,
-                    i.tp,
-                    i.vat,
-                    i.net_val,
-                    0,
-                    0.0,
-                    0,
-                    0.0,
-                    i.id
-                )
+            val deliveryItem = DeliveryList(i.matnr, i.batch, i.quantity, i.tp, i.vat, i.net_val, 0, 0.0, 0, 0.0, i.id)
             deliveryList.add(deliveryItem)
 
-            val cashCollectionItem =
-                CashCollectionList(0, 0.0, i.id)
+            val cashCollectionItem = CashCollectionList(i.return_quantity, i.return_net_val, i.id)
             cashCollectionList.add(cashCollectionItem)
+
+            if(i.quantity == i.return_quantity){
+                cashReceivedArrays.add(intArrayOf(1))
+            }else{
+                cashReceivedArrays.add(intArrayOf(0))
+            }
+
+            if (sessionManager.deliveryType == "CashRemaining") {
+                if(i.return_quantity != 0) {
+                    returnAmount += i.return_net_val
+                }
+            }
+        }
+
+        binding.returnAmountId.text = roundTheNumber(returnAmount)
+        if (totalAmount != null) {
+            binding.receivableAmountId.text = roundTheNumber(totalAmount.toDouble() - returnAmount)
+            binding.dueAmountId.text = roundTheNumber(totalAmount.toDouble() - returnAmount)
+        }
+
+        var isCashReceived: Boolean = true
+        for (array in cashReceivedArrays) {
+            for (element in array) {
+                if(element == 0){
+                    isCashReceived = false
+                }
+            }
+        }
+        if(isCashReceived){
+            binding.linReceivedAmount.visibility=View.GONE
+            binding.llRrButton.visibility=View.GONE
+            binding.llCdButton.visibility=View.GONE
         }
 
         transportArr = resources.getStringArray(R.array.transportType)
         adapter = ProductListAdapter("regular", this, flag, sessionManager)
-        val linearLayoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
@@ -326,7 +344,6 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                     return_quantity = i.quantity
                     return_net_val = i.net_val
                 }
-
             }
             if (sessionManager.deliveryType == "CashRemaining") {
                 for (i in productList) {
@@ -335,7 +352,6 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                         return_quantity = i.quantity
                         return_net_val = i.net_val
                     }
-
                 }
             }
 
@@ -353,11 +369,10 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 val iReturnAmount = returnAmount.toDouble()
                 val result = iTotalAmount - iReturnAmount
                 binding.receivableAmountId.text = roundTheNumber(result)
+                binding.dueAmountId.text = "0"
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
             }
-
-
         }
 
         binding.cancelId.setOnClickListener {
@@ -536,7 +551,6 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             }
         }
 
-
         binding.receivedAmountId.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
@@ -550,17 +564,20 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             override fun afterTextChanged(s: Editable) {
                 if (s.toString().isNotEmpty()) {
                     try {
-                        val totalAmount = binding.totalAmountId.text.toString()
+//                        val totalAmount = binding.totalAmountId.text.toString()
+                        val totalAmount = binding.receivableAmountId.text.toString()
                         val iTotalAmount = totalAmount.toDouble()
                         val receivedAmount = iTotalAmount - s.toString().toDouble()
                         binding.dueAmountId.text = roundTheNumber(receivedAmount)
                     } catch (e: NumberFormatException) {
                         e.printStackTrace()
                     }
-
-
+                }else{
+                    val totalAmount = binding.receivableAmountId.text.toString()
+                    val iTotalAmount = totalAmount.toDouble()
+                    val receivedAmount = iTotalAmount - 0.0
+                    binding.dueAmountId.text = roundTheNumber(receivedAmount)
                 }
-
             }
         })
     }
@@ -649,10 +666,8 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         receiveAmountId: String,
         returnQty: String,
         returnAmountId: String,
-        id:Int
+        id: Int?
     ) {
-
-
         val itemToUpdate = deliveryList.find { it.matnr == matnr }
         itemToUpdate?.apply {
             delivery_quantity = receivedQty.toInt()
@@ -661,14 +676,11 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             return_net_val = returnAmountId.toDouble()
         }
         if (sessionManager.deliveryType == "CashRemaining") {
-
             val itemToUpdate = cashCollectionList.find { it.id == id }
             itemToUpdate?.apply {
                 return_quantity = returnQty.toInt()
                 return_net_val = returnAmountId.toDouble()
             }
-
-
         }
         var sum = 0.0
 
@@ -676,7 +688,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             val returnNetVal = i.return_net_val
             sum += returnNetVal
         }
-        binding.returnAmountId.text = roundTheNumber(sum)
+        binding.returnAmountId.text = roundTheNumber(sum+returnAmount)
 
         try {
             val totalAmount = binding.totalAmountId.text.toString()
@@ -685,11 +697,10 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             val iReturnAmount = returnAmount.toDouble()
             val result = iTotalAmount - iReturnAmount
             binding.receivableAmountId.text = roundTheNumber(result)
+            binding.dueAmountId.text = roundTheNumber(result)
         } catch (e: NumberFormatException) {
             e.printStackTrace()
         }
-
-
     }
 
     private fun roundTheNumber(numInDouble: Double): String {

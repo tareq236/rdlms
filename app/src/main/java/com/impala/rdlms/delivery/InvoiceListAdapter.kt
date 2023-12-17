@@ -58,16 +58,28 @@ class InvoiceListAdapter(val context: Context,val flag:String) :
             binding.txvInvoiceQty.text = totalQty.toString()
             binding.txvInvoiceAmount.text = roundTheNumber(totalNetVal)
 
-            if(sessionManager.deliveryType.toString() != "Remaining"){
+            if(sessionManager.deliveryType.toString() != "DeliveryRemaining"){
                 var dvTotalNetVal = 0.0
                 var dvTotalQty = 0.0
+                var reTotalNetVal = 0.0
+                var reTotalQty = 0.0
                 for (product in item.product_list) {
                     dvTotalNetVal += product.delivery_net_val
                     dvTotalQty += product.delivery_quantity
+                    reTotalNetVal += product.return_net_val
+                    reTotalQty += product.return_quantity
                 }
-                binding.llDeliveryReport.visibility = View.VISIBLE
-                binding.txvDeliveredQty.text = dvTotalQty.toString()
-                binding.txvDeliveredAmount.text = roundTheNumber(dvTotalNetVal)
+                if(dvTotalQty != 0.0){
+                    binding.llDeliveryReport.visibility = View.VISIBLE
+                    binding.txvDeliveredQty.text = (dvTotalQty-reTotalQty).toString()
+                    binding.txvDeliveredAmount.text = roundTheNumber(dvTotalNetVal)
+                }
+                if(reTotalQty != 0.0){
+                    binding.llReturnReport.visibility = View.VISIBLE
+                    binding.txvReturnQty.text = reTotalQty.toString()
+                    binding.txvReturnAmount.text = roundTheNumber(reTotalNetVal)
+                }
+
             }
 
             binding.mcvItem.setOnClickListener {

@@ -77,10 +77,7 @@ class DeliveryRemainingActivity : AppCompatActivity() {
         val apiService = ApiService.CreateApi1()
         apiService.getDeliveryRemainingList(sessionManager.userId.toString(), deliveryType)
             .enqueue(object : Callback<DeliveryResponse> {
-                override fun onResponse(
-                    call: Call<DeliveryResponse>,
-                    response: Response<DeliveryResponse>
-                ) {
+                override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                     if (response.isSuccessful) {
                         val response = response.body()
                         if (response != null) {
