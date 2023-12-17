@@ -19,6 +19,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.gson.Gson
+import com.impala.rdlms.MainActivity
 import com.impala.rdlms.R
 import com.impala.rdlms.cash_collection.model.CashCollectionList
 import com.impala.rdlms.cash_collection.model.CashCollectionSave
@@ -39,7 +40,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     private lateinit var binding: ActivityProductListBinding
     private val locationPermissionCode = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var adapter: ProductListAdapter
+    private lateinit var adapter: ProductListAdapter
     var qty = 0
     var invoiceId = ""
     lateinit var transportArr: Array<String>
@@ -88,6 +89,12 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     }
 
     private fun initView() {
+        binding.imageHomeId.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+
         cashCollectionList = mutableListOf()
         //hide layout
         if (flag == "cash") {
