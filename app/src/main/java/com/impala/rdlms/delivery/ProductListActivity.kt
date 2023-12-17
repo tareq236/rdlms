@@ -626,7 +626,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             .setConfirmClickListener {
                 it.dismissWithAnimation()
                 callback?.invoke()
-                val i = Intent(this, DeliveryRemainingActivity::class.java)
+                val i = Intent(this, MainActivity::class.java)
                 // set the new task and clear flags
                 i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(i)

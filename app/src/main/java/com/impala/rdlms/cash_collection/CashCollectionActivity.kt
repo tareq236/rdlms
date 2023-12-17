@@ -110,7 +110,7 @@ class CashCollectionActivity : AppCompatActivity() {
                     showDialogBox(
                         SweetAlertDialog.ERROR_TYPE,
                         "Error",
-                        "Response failed. Try later"
+                        "Data not available"
                     )
                 }
             }

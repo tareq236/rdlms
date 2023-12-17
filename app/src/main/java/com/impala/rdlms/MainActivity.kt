@@ -153,6 +153,7 @@ class MainActivity : AppCompatActivity() {
         val txvDeliveryDone: TextView = findViewById(R.id.txv_delivery_done)
         val txvCashCollectionRemaining: TextView = findViewById(R.id.txv_cash_collection_remaining)
         val txvCashCollectionDone: TextView = findViewById(R.id.txv_cash_collection_done)
+        val txvTotalReturnQty: TextView = findViewById(R.id.txv_return_done)
 
 
         val apiService = ApiService.CreateApi1()
@@ -170,6 +171,7 @@ class MainActivity : AppCompatActivity() {
                             txvDeliveryDone.text = dashboardResult[0].delivery_done.toString()
                             txvCashCollectionRemaining.text = dashboardResult[0].cash_remaining.toString()
                             txvCashCollectionDone.text = dashboardResult[0].cash_done.toString()
+                            txvTotalReturnQty.text = dashboardResult[0].total_return_quantity!!.toString()
                         }else{
                             dismissLoadingDialog()
                             showDialogBox(SweetAlertDialog.WARNING_TYPE, "Waring", response.message)
