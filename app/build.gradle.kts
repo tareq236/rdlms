@@ -12,7 +12,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.12"
+        versionName = "1.15"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,6 +58,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("id.zelory:compressor:3.0.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.google.android.gms:play-services-location:17.1.0")
 
     //mobile number validation
     implementation ("com.googlecode.libphonenumber:libphonenumber:8.12.28")

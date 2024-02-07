@@ -54,7 +54,7 @@ class DeliveryAdapter(val context: Context, val flag: String) :
             var totalQty = 0.0
             for (invoice in item.invoice_list) {
                 for (product in invoice.product_list) {
-                    totalNetVal += product.net_val
+                    totalNetVal += product.net_val+product.vat
                     totalQty += product.quantity
                 }
             }

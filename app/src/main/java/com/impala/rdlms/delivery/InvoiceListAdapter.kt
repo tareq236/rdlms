@@ -49,7 +49,7 @@ class InvoiceListAdapter(val context: Context,val flag:String) :
             var totalNetVal = 0.0
             var totalQty = 0.0
             for (product in item.product_list) {
-                totalNetVal += product.net_val
+                totalNetVal += product.net_val + product.vat
                 totalQty += product.quantity
             }
 
@@ -71,7 +71,7 @@ class InvoiceListAdapter(val context: Context,val flag:String) :
                 }
                 if(dvTotalQty != 0.0){
                     binding.llDeliveryReport.visibility = View.VISIBLE
-                    binding.txvDeliveredQty.text = (dvTotalQty-reTotalQty).toString()
+                    binding.txvDeliveredQty.text = (dvTotalQty).toString()
                     binding.txvDeliveredAmount.text = roundTheNumber(dvTotalNetVal)
                 }
                 if(reTotalQty != 0.0){

@@ -53,14 +53,14 @@ class ProductListAdapter(
             if (flag == "regular") {
                 binding.productName.text = item.material_name
                 binding.totalQty.text = item.quantity.toString()
-                binding.totalAmountId.text = item.net_val.toString()
+                binding.totalAmountId.text = roundTheNumber(item.net_val + item.vat)
             } else if (flag == "all_received") {
                 val invoiceQty = item.quantity
                 binding.receivedQty.setText(invoiceQty.toString())
                 binding.productName.text = item.material_name
                 binding.totalQty.text = item.quantity.toString()
-                binding.totalAmountId.text = item.net_val.toString()
-                binding.receivedAmountId.text = roundTheNumber(binding.receivedQty.text.toString().toDouble() * item.tp)
+                binding.totalAmountId.text = roundTheNumber(item.net_val + item.vat)
+                binding.receivedAmountId.text = roundTheNumber(item.net_val + item.vat)
                 val receivedQty = binding.receivedQty.text.toString().toInt()
                 val result = invoiceQty - receivedQty
                 binding.returnQty.setText(result.toString())
@@ -70,11 +70,8 @@ class ProductListAdapter(
                 val totalQty = item.quantity
                 binding.totalQty.text = totalQty.toString()
                 binding.returnQty.setText(totalQty.toString())
-                binding.totalAmountId.text = item.net_val.toString()
-                binding.returnAmountId.text = roundTheNumber(
-                    binding.returnQty.text.toString()
-                        .toDouble() * item.tp
-                )
+                binding.totalAmountId.text = roundTheNumber(item.net_val + item.vat)
+                binding.returnAmountId.text = roundTheNumber(item.net_val + item.vat)
                 val returnQty = binding.returnQty.text.toString().toInt()
                 val result = totalQty - returnQty
                 binding.receivedQty.setText(result.toString())
@@ -87,16 +84,19 @@ class ProductListAdapter(
                     isReturnEdit = true
                     if (s.toString().isNotEmpty()) {
                         val totalQty = item.quantity
+                        val perVat = item.vat / item.quantity;
                         if (s.toString().toInt() <= totalQty) {
                             if(item.return_quantity != 0){
                                 if((s.toString().toInt()) > item.return_quantity){
-                                    binding.returnAmountId.text = (binding.returnQty.text.toString().toDouble() * item.tp).toString()
+                                    val returnQ = binding.returnQty.text.toString().toDouble();
+                                    val perAmount = ((item.net_val + item.vat) / item.quantity)
+                                    binding.returnAmountId.text = roundTheNumber(perAmount * returnQ.toInt())
                                     val returnQty = s.toString().toInt()
                                     val result = totalQty - returnQty
                                     if (!isReceivedEdit) binding.receivedQty.setText(result.toString())
                                     clickManage.deliveryList(
                                         item.matnr,
-                                        s.toString(),
+                                        binding.receivedQty.text.toString(),
                                         binding.receivedAmountId.text.toString(),
                                         binding.returnQty.text.toString(),
                                         binding.returnAmountId.text.toString(),
@@ -112,13 +112,15 @@ class ProductListAdapter(
                                     ).show();
                                 }
                             }else{
-                                binding.returnAmountId.text = (binding.returnQty.text.toString().toDouble() * item.tp).toString()
+                                val returnQ = binding.returnQty.text.toString().toDouble();
+                                val perAmount = ((item.net_val + item.vat) / item.quantity)
+                                binding.returnAmountId.text = roundTheNumber(perAmount * returnQ.toInt())
                                 val returnQty = s.toString().toInt()
                                 val result = totalQty - returnQty
                                 if (!isReceivedEdit) binding.receivedQty.setText(result.toString())
                                 clickManage.deliveryList(
                                     item.matnr,
-                                    s.toString(),
+                                    binding.receivedQty.text.toString(),
                                     binding.receivedAmountId.text.toString(),
                                     binding.returnQty.text.toString(),
                                     binding.returnAmountId.text.toString(),
@@ -164,14 +166,18 @@ class ProductListAdapter(
                     isReceivedEdit = true
                     if (s.toString().isNotEmpty()) {
                         val totalQty = item.quantity
+                        val perVat = item.vat / item.quantity
                         if (s.toString().toInt() <= totalQty) {
-                            binding.receivedAmountId.text = (binding.receivedQty.text.toString().toDouble() * item.tp).toString()
+                            val receivedQ = binding.receivedQty.text.toString().toDouble();
+                            val perAmount = ((item.net_val + item.vat) / item.quantity)
+                            binding.receivedAmountId.text = roundTheNumber(receivedQ.toInt() * perAmount)
                             val receivedQty = s.toString().toInt()
+
                             val result = totalQty - receivedQty
                             if (!isReturnEdit) binding.returnQty.setText(result.toString())
                             clickManage.deliveryList(
                                 item.matnr,
-                                s.toString(),
+                                binding.receivedQty.text.toString(),
                                 binding.receivedAmountId.text.toString(),
                                 binding.returnQty.text.toString(),
                                 binding.returnAmountId.text.toString(),
@@ -215,8 +221,11 @@ class ProductListAdapter(
                 binding.returnQty.visibility = View.GONE
                 binding.tvReturnQty.visibility = View.VISIBLE
                 binding.tvReceivedQty.visibility = View.VISIBLE
-                binding.receivedAmountId.text=item.delivery_net_val.toString()
-                binding.returnAmountId.text=item.return_net_val.toString()
+                val perVat = item.vat / item.quantity;
+                val receivedTotalVat = item.delivery_quantity * perVat;
+                val returnTotalVat = item.return_quantity * perVat;
+                binding.receivedAmountId.text= roundTheNumber(item.delivery_net_val)
+                binding.returnAmountId.text=roundTheNumber(item.return_net_val)
 
                 binding.tvReceivedQty.text = item.delivery_quantity.toString()
                 binding.tvReturnQty.text = item.return_quantity.toString()
@@ -225,8 +234,11 @@ class ProductListAdapter(
                 binding.returnQty.visibility = View.GONE
                 binding.tvReturnQty.visibility = View.VISIBLE
                 binding.tvReceivedQty.visibility = View.VISIBLE
-                binding.receivedAmountId.text=item.delivery_net_val.toString()
-                binding.returnAmountId.text=item.return_net_val.toString()
+                val perVat = item.vat / item.quantity;
+                val receivedTotalVat = item.delivery_quantity * perVat;
+                val returnTotalVat = item.return_quantity * perVat;
+                binding.receivedAmountId.text= roundTheNumber(item.delivery_net_val)
+                binding.returnAmountId.text=roundTheNumber(item.return_net_val)
 
                 binding.tvReceivedQty.text = item.delivery_quantity.toString()
                 binding.tvReturnQty.text = item.return_quantity.toString()
@@ -238,12 +250,15 @@ class ProductListAdapter(
                     binding.returnQty.visibility = View.GONE
                     binding.tvReturnQty.visibility = View.VISIBLE
                     binding.tvReturnQty.text = item.return_quantity.toString()
-                    binding.returnAmountId.text=item.return_net_val.toString()
+                    binding.returnAmountId.text=roundTheNumber(item.return_net_val)
+
                 }else{
                     if(item.return_quantity != 0){
                         binding.tvReturnQty.visibility = View.VISIBLE
                         binding.tvReturnQty.text = item.return_quantity.toString()+" returned."
-                        binding.returnAmountId.text=item.return_net_val.toString()
+                        val perVat = item.vat / item.quantity;
+                        val returnTotalVat = item.return_quantity * perVat;
+                        binding.returnAmountId.text=roundTheNumber(item.return_net_val)
                     }
                     binding.receivedQty.visibility = View.VISIBLE
                     binding.returnQty.visibility = View.VISIBLE

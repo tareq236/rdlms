@@ -1,5 +1,6 @@
 package com.impala.rdlms
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -29,6 +30,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+import android.content.pm.PackageManager
+import android.location.Location
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.*
+import com.impala.rdlms.utils.LocationForegroundService
+import com.impala.rdlms.utils.SocketManager
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
@@ -41,6 +51,12 @@ class MainActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var updateTimeRunnable: Runnable
     private lateinit var dashboardResult: List<DashboardResult>
+
+    // FOR LOCATION TRACKING
+    private val REQUEST_LOCATION_PERMISSION = 1
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,10 +156,94 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val serviceIntent = Intent(this, LocationForegroundService::class.java)
+        startService(serviceIntent)
+
+    // FOR LOCATION TRACKING
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Set up location request parameters
+//        locationRequest = LocationRequest.create().apply {
+//            interval = 5000 // 5 seconds
+//            fastestInterval = 3000 // 3 seconds
+//            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+//        }
+
+//        locationCallback = object : LocationCallback() {
+//            override fun onLocationResult(locationResult: LocationResult) {
+//                locationResult?.lastLocation?.let { location ->
+//                    // Handle the new location update
+//                    updateLocationUI(location)
+//                }
+//            }
+//        }
+
+        // Check and request location permissions
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                android.Manifest.permission.ACCESS_FINE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED
+//        ) {
+//            startLocationUpdates()
+//        } else {
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+//                REQUEST_LOCATION_PERMISSION
+//            )
+//        }
+    // FOR LOCATION TRACKING
 
 //        val apiService = ApiService.CreateApi1()
 //        val userId = sessionManager.userId
 
+
+    }
+
+//    private fun startLocationUpdates() {
+//        if (ActivityCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return
+//        }
+//        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+//    }
+
+    private fun updateLocationUI(location: Location) {
+        Log.d("LocationTracking", "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
+        Log.d("LocationTracking", "Accuracy: ${location.accuracy} meters")
+
+        // Update your UI with the new location data
+        // For example, update a map, send the location to a server, etc.
+    }
+
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                startLocationUpdates()
+//            } else {
+//                // Handle the case where the user denied the location permission
+//            }
+//        }
+//    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Stop location updates when the activity is destroyed
+//        fusedLocationClient.removeLocationUpdates(locationCallback)
 
     }
 
@@ -153,6 +253,7 @@ class MainActivity : AppCompatActivity() {
         val txvDeliveryDone: TextView = findViewById(R.id.txv_delivery_done)
         val txvCashCollectionRemaining: TextView = findViewById(R.id.txv_cash_collection_remaining)
         val txvCashCollectionDone: TextView = findViewById(R.id.txv_cash_collection_done)
+        val txvReturnDone: TextView = findViewById(R.id.txv_return_done)
 
 
         val apiService = ApiService.CreateApi1()
@@ -170,6 +271,12 @@ class MainActivity : AppCompatActivity() {
                             txvDeliveryDone.text = dashboardResult[0].delivery_done.toString()
                             txvCashCollectionRemaining.text = dashboardResult[0].cash_remaining.toString()
                             txvCashCollectionDone.text = dashboardResult[0].cash_done.toString()
+//                            txvReturnDone.text = dashboardResult[0].total_return_quantity.toString();
+                            if (dashboardResult[0].total_return_quantity != null) {
+                                txvReturnDone.text = dashboardResult[0].total_return_quantity.toString();
+                            } else {
+                                txvReturnDone.text = "0";
+                            }
                         }else{
                             dismissLoadingDialog()
                             showDialogBox(SweetAlertDialog.WARNING_TYPE, "Waring", response.message)

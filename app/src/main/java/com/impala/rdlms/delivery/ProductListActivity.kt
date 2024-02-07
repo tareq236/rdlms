@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.gson.Gson
 import com.impala.rdlms.R
+import com.impala.rdlms.cash_collection.CashCollectionActivity
 import com.impala.rdlms.cash_collection.model.CashCollectionList
 import com.impala.rdlms.cash_collection.model.CashCollectionSave
 import com.impala.rdlms.databinding.ActivityProductListBinding
@@ -33,7 +34,9 @@ import com.impala.rdlms.utils.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import kotlin.math.log
+import kotlin.math.round
+import java.text.DecimalFormat
 
 class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDeliveryItem {
     private lateinit var binding: ActivityProductListBinding
@@ -50,6 +53,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
     private lateinit var sessionManager: SessionManager
     var returnAmount: Double = 0.00
     var receivableAmount: Double = 0.00
+    private lateinit var productList: List<Product>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,14 +146,14 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         binding.totalAmountId.text = totalAmount
 
         deliveryList = mutableListOf()
-        val productList = deliveryDetailsM.product_list
+        productList = deliveryDetailsM.product_list
 
         val cashReceivedArrays: ArrayList<IntArray> = ArrayList()
         for (i in productList) {
             val deliveryItem = DeliveryList(i.matnr, i.batch, i.quantity, i.tp, i.vat, i.net_val, 0, 0.0, 0, 0.0, i.id)
             deliveryList.add(deliveryItem)
 
-            val cashCollectionItem = CashCollectionList(i.return_quantity, i.return_net_val, i.id)
+            val cashCollectionItem = CashCollectionList(i.return_quantity, i.return_net_val,i.vat, i.id)
             cashCollectionList.add(cashCollectionItem)
 
             if(i.quantity == i.return_quantity){
@@ -254,7 +258,6 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                                                     "SUCCESS",
                                                     "Save Successfully  "
                                                 )
-
                                             } else {
                                                 dismissLoadingDialog()
                                                 showDialogBox(
@@ -316,7 +319,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 val itemToUpdate = deliveryList.find { it.matnr == i.matnr }
                 itemToUpdate?.apply {
                     delivery_quantity = i.quantity
-                    delivery_net_val = i.net_val
+                    delivery_net_val = i.net_val + i.vat
                     return_quantity = 0
                     return_net_val = 0.0
                 }
@@ -328,8 +331,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         binding.allReturnId.setOnClickListener {
             val adapter = ProductListAdapter("all_return", this, flag, sessionManager)
 
-            val linearLayoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             binding.recyclerView.layoutManager = linearLayoutManager
             binding.recyclerView.adapter = adapter
             binding.recyclerView.setHasFixedSize(true)
@@ -342,7 +344,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                     delivery_quantity = 0
                     delivery_net_val = 0.0
                     return_quantity = i.quantity
-                    return_net_val = i.net_val
+                    return_net_val = DecimalFormat("#.##").format(i.net_val+i.vat).toDouble()
                 }
             }
             if (sessionManager.deliveryType == "CashRemaining") {
@@ -350,7 +352,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                     val itemToUpdate = cashCollectionList.find { it.id == i.id }
                     itemToUpdate?.apply {
                         return_quantity = i.quantity
-                        return_net_val = i.net_val
+                        return_net_val = DecimalFormat("#.##").format(i.net_val+i.vat).toDouble()
                     }
                 }
             }
@@ -474,16 +476,20 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                      val latitude = location.latitude
                     val longitude = location.longitude
                      if (validateCashCollectionInput(binding.receivedAmountId.text.toString())) {
-                    val cashCollectionList = CashCollectionSave(
-                        deliveryDetailsM.billing_doc_no,
-                        last_status = "cash_collection",
-                        type = "cash_collection",
-                        cash_collection = binding.receivedAmountId.text.toString().toDouble(),
-                        cash_collection_latitude = latitude.toString(),
-                        cash_collection_longitude = longitude.toString(),
-                        cash_collection_status = "Done",
-                        deliverys = cashCollectionList
-                    )
+                         var cashCollection = 0.0
+                         if(!binding.receivedAmountId.text.toString().isNullOrBlank()){
+                             cashCollection = binding.receivedAmountId.text.toString().toDouble()
+                         }
+                        val cashCollectionList = CashCollectionSave(
+                            deliveryDetailsM.billing_doc_no,
+                            last_status = "cash_collection",
+                            type = "cash_collection",
+                            cash_collection = cashCollection,
+                            cash_collection_latitude = latitude.toString(),
+                            cash_collection_longitude = longitude.toString(),
+                            cash_collection_status = "Done",
+                            deliverys = cashCollectionList
+                        )
 
                     val apiService = ApiService.CreateApi1()
                     showLoadingDialog()
@@ -580,6 +586,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
                 }
             }
         })
+
     }
 
     private fun showLoadingDialog() {
@@ -600,12 +607,23 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         return true
     }
     private fun validateCashCollectionInput(receiveAmount: String): Boolean {
-        if (receiveAmount.isEmpty()) {
-            showDialogBox(SweetAlertDialog.WARNING_TYPE, "Validation", "Receive Amount is required")
-            return false
+        var returnQty = 0
+        var quantity = 0
+        for (i in productList) {
+            quantity += i.quantity
         }
-
-        return true
+        for (i in deliveryList) {
+            returnQty += i.return_quantity
+        }
+        if(returnQty == quantity){
+            return true
+        }else{
+            if (receiveAmount.isEmpty()) {
+                showDialogBox(SweetAlertDialog.WARNING_TYPE, "Validation", "Receive Amount is required")
+                return false
+            }
+            return true
+        }
     }
     private fun showFDialogBox(
         type: Int,
@@ -619,12 +637,19 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
             .setConfirmClickListener {
                 it.dismissWithAnimation()
                 callback?.invoke()
-                val i = Intent(this, DeliveryRemainingActivity::class.java)
-                // set the new task and clear flags
-                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(i)
-//                val intent = Intent(this@ProductListActivity, DeliveryRemainingActivity::class.java)
-//                startActivity(intent)
+
+                val test = sessionManager.deliveryType
+                println("[INFO=] $test")
+
+                if(sessionManager.deliveryType.toString() == "CashRemaining") {
+                    val i = Intent(this, CashCollectionActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(i)
+                }else{
+                    val i = Intent(this, DeliveryRemainingActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(i)
+                }
             }
         sweetAlertDialog.show()
     }
@@ -685,7 +710,7 @@ class ProductListActivity : AppCompatActivity(), ProductListAdapter.IAddDelivery
         var sum = 0.0
 
         for (i in deliveryList) {
-            val returnNetVal = i.return_net_val
+            val returnNetVal = i.return_net_val+i.vat
             sum += returnNetVal
         }
         binding.returnAmountId.text = roundTheNumber(sum+returnAmount)

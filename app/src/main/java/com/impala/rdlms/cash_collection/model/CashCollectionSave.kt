@@ -16,5 +16,6 @@ data class CashCollectionSave(
 data class CashCollectionList(
     var return_quantity: Int,
     var return_net_val: Double,
+    var vat: Double,
     var id: Int?
 )
