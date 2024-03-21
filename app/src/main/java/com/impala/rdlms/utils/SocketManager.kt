@@ -33,6 +33,7 @@ class SocketManager private constructor() {
 
         try {
             socket = IO.socket("http://174.138.120.140:6044", options)
+//            socket = IO.socket("http://172.16.16.53:6044", options)
             setupSocketListeners()
         } catch (e: Exception) {
             e.printStackTrace()
