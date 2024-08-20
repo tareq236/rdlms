@@ -219,7 +219,6 @@ class RegistrationActivity : AppCompatActivity() {
         }
         return true
     }
-
     private fun validatePassword(): Boolean {
         if (binding.edtNewPassword.text.toString().trim().isEmpty()) {
             binding.tilNewPassword.error = "Required Field!"
@@ -283,13 +282,7 @@ class RegistrationActivity : AppCompatActivity() {
         return isValid
     }
 
-
-    private fun showDialogBox(
-        type: Int,
-        title: String,
-        message: String,
-        callback: (() -> Unit)? = null
-    ) {
+    private fun showDialogBox(type: Int, title: String, message: String, callback: (() -> Unit)? = null) {
         val sweetAlertDialog = SweetAlertDialog(this, type)
             .setTitleText(title)
             .setContentText(message)
@@ -300,12 +293,7 @@ class RegistrationActivity : AppCompatActivity() {
             }
         sweetAlertDialog.show()
     }
-    private fun showFDialogBox(
-        type: Int,
-        title: String,
-        message: String,
-        callback: (() -> Unit)? = null
-    ) {
+    private fun showFDialogBox(type: Int, title: String, message: String, callback: (() -> Unit)? = null) {
         val sweetAlertDialog = SweetAlertDialog(this, type)
             .setTitleText(title)
             .setContentText(message)
@@ -317,12 +305,7 @@ class RegistrationActivity : AppCompatActivity() {
             }
         sweetAlertDialog.show()
     }
-    private fun showDialogBoxForValidation(
-        type: Int,
-        title: String,
-        message: String,
-        callback: (() -> Unit)? = null
-    ) {
+    private fun showDialogBoxForValidation(type: Int, title: String, message: String, callback: (() -> Unit)? = null) {
         val sweetAlertDialog = SweetAlertDialog(this, type)
             .setTitleText(title)
             .setContentText(message)
